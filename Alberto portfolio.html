@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberto Stocco - Graphic Designer Portfolio</title>
+    <!-- Caricamento di Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Caricamento di Google Fonts: Inter per il corpo del testo, e un font più audace per i titoli (Orbitron) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Caricamento di GSAP per le animazioni -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/TextPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/CustomEase.min.js"></script>
+    <!-- Caricamento di Font Awesome per le icone social e app -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Caricamento di Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Stili globali e font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Sfondo nero predominante */
+            color: #fff; /* Testo bianco predominante */
+            overflow-x: hidden; /* Evita lo scroll orizzontale */
+            scroll-behavior: smooth; /* Scorrimento fluido per navigazione interna */
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Orbitron', sans-serif; /* Nuovo font audace per i titoli */
+        }
+
+        /* Nuovi Colori accento dinamici: Oro, Argento, Blu Scuro (per profondità) */
+        .accent-gold {
+            color: #FFD700; /* Gold */
+        }
+        .bg-accent-gold {
+            background-color: #FFD700;
+        }
+        .accent-silver {
+            color: #C0C0C0; /* Silver */
+        }
+        .bg-accent-silver {
+            background-color: #C0C0C0;
+        }
+        .accent-deep-blue { /* Utilizzato per dettagli e ombre, non per highlights primari */
+            color: #1A2B4C; /* Dark Blue for depth */
+        }
+        .bg-accent-deep-blue {
+            background-color: #1A2B4C;
+        }
+        /* Keep accent-cyan for specific bright highlights if needed, otherwise removed */
+        .accent-cyan {
+            color: #00FFFF; /* Cyan Neon - used minimally for specific bright effects */
+        }
+        .bg-accent-cyan {
+            background-color: #00FFFF;
+        }
+
+        /* Stili per le sezioni a schermo intero - Ora con sfondo semitransparente */
+        .full-screen-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 0;
+            background-color: rgba(0,0,0,0.6); /* Sfondo nero semitransparente per tutte le sezioni */
+        }
+        /* Override per le sezioni neutral-900 (leggermente più chiare) */
+        section[id="about"],
+        section[id="project-1"],
+        section[id="project-3"],
+        section[id="contact-booking"] { /* Updated ID */
+            background-color: rgba(23,23,23,0.8); /* Corrisponde a bg-neutral-900 con trasparenza */
+        }
+
+        /* Linee e forme astratte - esempi (per Hero Section, z-index -1) */
+        .abstract-element {
+            position: absolute;
+            opacity: 0;
+            mix-blend-mode: overlay;
+            z-index: -1; /* Dietro al contenuto della sezione ma sopra lo sfondo globale */
+        }
+        .abstract-element-1 { /* Circle/Oval */
+            top: 10%;
+            left: -5%;
+            width: 300px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid #FFD700; /* Gold */
+            transform: rotate(-30deg);
+            opacity: 0.2;
+        }
+        .abstract-element-2 { /* Larger, more subtle circle */
+            bottom: 5%;
+            right: 5%;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 3px solid #C0C0C0; /* Silver */
+            opacity: 0.15;
+            transform: rotate(15deg);
+        }
+        .abstract-element-3 { /* Ring with fill */
+            top: 20%;
+            right: 15%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #00FFFF; /* Cyan */
+            background-color: rgba(0, 255, 255, 0.05); /* Subtle cyan fill */
+            transform: rotate(45deg);
+            opacity: 0.1;
+        }
+        .abstract-line-1 { /* Hero Line - more pronounced */
+            position: absolute;
+            top: 30%;
+            left: 0%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #FFD700, transparent); /* Gold */
+            transform: rotate(-10deg);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .abstract-line-2 { /* Hero Line - more pronounced */
+            position: absolute;
+            bottom: 20%;
+            right: 0%;
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(to left, transparent, #C0C0C0, transparent); /* Silver */
+            transform: rotate(5deg);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* GLOBAL ABSTRACT BACKGROUND STYLES */
+        #global-abstract-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Ensure it's behind everything */
+            pointer-events: none; /* Do not interfere with mouse events */
+            overflow: hidden; /* Hide anything outside */
+            background-image: radial-gradient(circle at top left, rgba(255, 215, 0, 0.05) 0%, transparent 30%), /* Gold */
+                              radial-gradient(circle at bottom right, rgba(192, 192, 192, 0.05) 0%, transparent 30%); /* Silver */
+        }
+
+        .bg-particle, .bg-line-bg { /* Renamed to avoid conflict */
+            position: absolute;
+            opacity: 0; /* Hidden by default, animated by JS */
+            mix-blend-mode: screen; /* Lighten effect */
+        }
+
+        .bg-particle {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.05); /* Very subtle white */
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+
+        .bg-line-bg {
+            width: 80px; /* Length of the line */
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), transparent); /* Gold */
+            transform-origin: center center;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Stili per la sidebar di navigazione */
+        .sidebar-nav {
+            position: fixed;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        .sidebar-nav-item.active {
+            background-color: #FFD700; /* Gold */
+            transform: scale(1.2);
+            box-shadow: 0 0 8px #FFD700; /* Gold */
+        }
+
+        /* Stili per il modulo di contatto */
+        .contact-form input,
+        .contact-form textarea {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #FFD700; /* Gold */
+        }
+
+        /* Stili per i numeri di progetto tagliati */
+        .project-number-bg {
+            position: absolute;
+            font-size: clamp(8rem, 20vw, 20rem);
+            font-weight: 900;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif; /* Aggiornato il font */
+            opacity: 0.03; /* More subtle */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            mix-blend-mode: overlay;
+            z-index: 0;
+            pointer-events: none;
+            top: -5%;
+            right: -2%;
+            transform: rotate(-15deg);
+        }
+
+        /* Effetto Glitch per il testo */
+        .glitch-text-wrapper {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            transform: translate3d(0,0,0);
+        }
+        .glitch-effect.active::before,
+        .glitch-effect.active::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+        }
+
+        .glitch-effect.active::before {
+            left: 2px;
+            text-shadow: -2px 0 #FFD700; /* Gold */
+            animation: glitch-anim-left 0.8s infinite alternate-reverse;
+        }
+
+        .glitch-effect.active::after {
+            left: -2px;
+            text-shadow: 2px 0 #C0C0C0; /* Silver */
+            animation: glitch-anim-right 0.8s infinite alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(-5px, 0, 0); }
+            50% { transform: translate3d(5px, 0, 0); }
+            75% { transform: translate3d(-3px, 0, 0); }
+            100% { transform: translate3d(3px, 0, 0); }
+        }
+
+        @keyframes glitch-anim-left {
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(2px, 0, 0); }
+            50% { transform: translate3d(-3px, 0, 0); }
+            75% { transform: translate3d(1px, 0, 0); }
+            100% { transform: translate3d(-2px, 0, 0); }
+        }
+
+        @keyframes glitch-anim-right {
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(-2px, 0, 0); }
+            50% { transform: translate3d(3px, 0, 0); }
+            75% { transform: translate3d(-1px, 0, 0); }
+            100% { transform: translate3d(2px, 0, 0); }
+        }
+
+        /* Animazioni di hover più avanzate per le icone social */
+        .social-icon-hover {
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            transform: perspective(1px) translateZ(0); /* Forcing hardware acceleration */
+        }
+        .social-icon-hover::before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #FFD700, #C0C0C0); /* Gold to Silver */
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            transition-property: transform;
+            transition-duration: 0.3s;
+            transition-timing-function: ease-out;
+            border-radius: 0.5rem;
+        }
+        .social-icon-hover:hover {
+            color: #fff; /* Text becomes white on hover */
+            transform: translateY(-5px); /* No rotate on hover for better consistency */
+        }
+        .social-icon-hover:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Animazioni per i servizi in hover */
+        .service-card {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background-color: rgba(23, 23, 23, 0.5); /* Slightly transparent for background effect */
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            border-color: #FFD700; /* Gold */
+            background-color: rgba(23, 23, 23, 0.8);
+            transform: translateY(-8px) scale(1.02); /* More pronounced lift */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+        }
+        .service-card:hover .text-5xl i {
+            transform: rotateY(360deg) scale(1.1) translateX(5px); /* Slight horizontal movement */
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            color: #C0C0C0; /* Changed to Silver */
+        }
+
+        /* Stili per il testo PORTFOLIO nella Hero Section */
+        .hero-portfolio-text {
+            font-size: clamp(8rem, 18vw, 18rem); /* Even larger */
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -0.06em; /* Tighter letter spacing */
+            -webkit-text-stroke: 2px #fff;
+            color: transparent;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-7deg); /* More rotation */
+            opacity: 0.04; /* More subtle */
+            z-index: 5;
+            white-space: nowrap;
+            font-family: 'Orbitron', sans-serif; /* Aggiornato il font */
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Nuovi stili per i bordi delle immagini nei progetti */
+        .project-main-image, .project-secondary-image {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease-out;
+        }
+        .project-main-image:hover, .project-secondary-image:hover {
+            transform: scale(1.02) rotate(0deg) !important; /* Straighten on hover */
+            border-color: #FFD700; /* Gold */
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.4); /* Gold shadow */
+        }
+
+        /* Effetto per il bordo dell'immagine di Alberto */
+        .about-image-container img {
+            border: 4px solid #FFD700; /* Gold */
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); /* Gold shadow */
+            filter: grayscale(100%) contrast(1.2); /* Black and white with higher contrast */
+            transition: all 0.5s ease-out;
+        }
+        .about-image-container img:hover {
+            filter: grayscale(0%) contrast(1); /* Color on hover */
+            transform: rotate(0deg) scale(1.05) !important; /* Straighten and slightly enlarge */
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.8); /* Cyan shadow */
+        }
+
+        /* About Me Abstract Overlays */
+        .about-abstract-square {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #C0C0C0; /* Silver */
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .about-abstract-line {
+            position: absolute;
+            height: 2px;
+            background-color: #FFD700; /* Gold */
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        /* Project Section Specific Styling */
+        .project-section-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+        }
+        @media (min-width: 768px) {
+            .project-section-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4rem;
+            }
+        }
+        .project-image-stack {
+            position: relative;
+            min-height: 400px; /* Ensure space for overlapping images */
+        }
+        .project-image-stack img:nth-child(1) { /* Main image */
+            position: relative;
+            z-index: 10;
+            top: 0;
+            left: 0;
+        }
+        .project-image-stack img:nth-child(2) { /* Secondary 1 */
+            position: absolute;
+            z-index: 20;
+            width: 65%;
+            top: 40%;
+            left: -15%;
+            transform: rotate(-10deg);
+        }
+        .project-image-stack img:nth-child(3) { /* Secondary 2 */
+            position: absolute;
+            z-index: 30;
+            width: 55%;
+            bottom: -5%;
+            right: -10%;
+            transform: rotate(15deg);
+        }
+        /* Adjust for project-2 specific layout (reversed) */
+        #project-2 .project-image-stack img:nth-child(2) {
+            left: auto;
+            right: -15%;
+        }
+        #project-2 .project-image-stack img:nth-child(3) {
+            right: auto;
+            left: -10%;
+        }
+        /* Project Tags */
+        .project-tags span {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* full rounded */
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .project-tags span:hover {
+            background-color: #FFD700; /* Gold */
+            border-color: #FFD700; /* Gold */
+            color: #fff;
+        }
+
+        /* Specific Project Title Glitch/Style */
+        .project-description h3.project-title-stylized {
+            font-size: clamp(2.8rem, 5.5vw, 4.5rem); /* Slightly larger */
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            -webkit-text-stroke: 1.5px #1A2B4C; /* Dark blue stroke */
+            color: #FFD700; /* Gold fill */
+            text-shadow: 
+                -3px -3px 0px rgba(0,0,0,0.5), /* Subtle dark shadow top-left */
+                3px 3px 0px rgba(0,0,0,0.5),  /* Subtle dark shadow bottom-right */
+                6px 6px 10px rgba(0,0,0,0.7); /* More pronounced general shadow for depth */
+            position: relative; /* Ensure z-index works for icon */
+            z-index: 1; /* Above any potential background lines */
+            display: inline-flex;
+            align-items: center;
+        }
+        .project-title-stylized .icon {
+            position: relative; /* Make it relative to enable its own animations */
+            margin-left: 0.75rem; /* Space between text and icon */
+            font-size: 0.7em; /* Keep it relative, maybe slightly smaller */
+            color: #FFD700; /* Gold */
+            transform: rotate(-20deg); /* Initial rotation */
+            opacity: 0.8;
+            transition: transform 0.3s ease-out, color 0.3s ease-out;
+        }
+        .project-title-stylized:hover .icon {
+            transform: rotate(0deg) scale(1.3); /* More pronounced scale */
+            color: #C0C0C0; /* Changed to Silver on hover */
+        }
+        /* Ensure responsive font sizes for project titles */
+        .project-description h3 {
+            font-size: clamp(2.5rem, 5vw, 4rem); /* Responsive font size */
+        }
+
+        /* Tool List Icons */
+        .tool-icon {
+            margin-right: 0.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease-out, color 0.3s ease-out;
+        }
+        .tool-list span:hover .tool-icon {
+            transform: scale(1.2) rotate(10deg);
+            color: #FFD700; /* Gold */
+        }
+
+        /* Flatpickr overrides for Airbnb style - Dark Theme (Professionale) */
+        .flatpickr-calendar {
+            background-color: transparent !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            width: auto !important;
+            margin: 0 auto;
+            max-width: 600px;
+            overflow: hidden; /* Ensure calendar content stays within bounds */
+            border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Added border */
+            border-radius: 0.75rem !important; /* Rounded corners */
+            backdrop-filter: blur(8px); /* Subtle blur for depth */
+            background-color: rgba(23, 23, 23, 0.6) !important; /* Slightly more opaque background */
+        }
+        .flatpickr-months {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: #1a1a1a !important;
+            padding: 0.75rem 1.25rem !important; /* More padding */
+            border-radius: 0.75rem 0.75rem 0 0; /* Match parent radius */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4); /* Subtle shadow */
+        }
+        .flatpickr-month {
+            color: #fff !important;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif; /* Aggiornato il font */
+            font-size: 1.2rem; /* Slightly larger */
+        }
+        .flatpickr-current-month span.cur-month {
+            font-family: 'Orbitron', sans-serif; /* Aggiornato il font */
+        }
+        .flatpickr-current-month .numInputWrapper {
+            font-family: 'Inter', sans-serif;
+            color: #fff !important;
+        }
+        .flatpickr-weekday {
+            color: #fff !important;
+            font-weight: bold !important;
+            font-family: 'Inter', sans-serif !important;
+            text-transform: uppercase;
+            font-size: 0.9rem; /* Slightly smaller for week days */
+            padding-bottom: 0.5rem; /* Space below weekdays */
+        }
+        .flatpickr-days {
+            padding: 1rem !important; /* More padding */
+        }
+        .flatpickr-day {
+            color: #fff !important;
+            height: 42px !important; /* Slightly larger clickable area */
+            line-height: 42px !important;
+            max-width: 42px !important;
+            margin: 0 auto;
+            border-radius: 50% !important;
+            transition: all 0.2s ease; /* Smooth transitions */
+        }
+        .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay, .flatpickr-day.flatpickr-disabled {
+            color: #666 !important;
+            opacity: 0.6 !important; /* More transparent for disabled */
+            cursor: not-allowed !important;
+            box-shadow: none;
+        }
+        .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.inRange {
+            background-color: #FFD700 !important; /* Gold */
+            color: #fff !important;
+            border-color: #FFD700 !important; /* Gold */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Gold glow */
+        }
+        .flatpickr-day.today {
+            border: 2px solid #C0C0C0 !important; /* Silver */
+            background-color: transparent !important;
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .flatpickr-day:hover:not(.selected):not(.flatpickr-disabled) {
+            background-color: rgba(255, 255, 255, 0.15) !important; /* More visible hover */
+            transform: scale(1.05); /* Slight scale on hover */
+        }
+        .flatpickr-prev-month svg, .flatpickr-next-month svg {
+            fill: #fff !important;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+        }
+        .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg {
+            opacity: 0.8;
+            transform: scale(1.2); /* More prominent arrow hover */
+        }
+        .flatpickr-innerContainer {
+            background-color: #222 !important; /* Sfondo scuro per i contenitori dei giorni */
+            border-radius: 0 0 0.75rem 0.75rem; /* Match parent radius */
+        }
+        .flatpickr-rContainer {
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .flatpickr-rContainer:first-child {
+            border-left: none;
+        }
+
+        /* Stili per i pulsanti degli slot orari */
+        .time-slot-button {
+            background-color: rgba(255, 255, 255, 0.08); /* Slightly brighter base */
+            color: #fff;
+            padding: 0.85rem 1.8rem; /* More padding */
+            border-radius: 0.75rem; /* More rounded */
+            border: 1px solid rgba(255, 255, 255, 0.25); /* More defined border */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1.15rem; /* Slightly larger font */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* More pronounced shadow */
+            font-weight: 500;
+        }
+        .time-slot-button:hover:not(.selected):not(.disabled) {
+            background-color: #FFD700; /* Gold */
+            border-color: #FFD700; /* Gold */
+            transform: translateY(-5px) scale(1.03); /* More lift */
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6); /* Gold glow */
+            color: #fff;
+        }
+        .time-slot-button.selected {
+            background-color: #C0C0C0; /* Silver */
+            border-color: #C0C0C0; /* Silver */
+            color: #000; /* Black text on silver for readability */
+            transform: scale(1.07); /* More pronounced scale */
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.7); /* Silver glow */
+        }
+        .time-slot-button.disabled {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #777; /* Darker disabled text */
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.1);
+            opacity: 0.4; /* More faded */
+            box-shadow: none;
+        }
+
+        /* Contact Form / Booking Form Inputs */
+        .contact-form input,
+        .contact-form textarea,
+        #booking-form input,
+        #platform-contact-input { /* Added ID for new input */
+            background-color: rgba(255, 255, 255, 0.08); /* Consistent transparent background */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 1rem; /* More padding */
+            border-radius: 0.75rem; /* More rounded */
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.3); /* Inner shadow for depth */
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        #booking-form input:focus,
+        #platform-contact-input:focus { /* Added ID for new input */
+            outline: none;
+            border-color: #FFD700; /* Gold */
+            background-color: rgba(255, 255, 255, 0.15); /* Brighter on focus */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 1px 5px rgba(0,0,0,0.3); /* Gold glow on focus */
+        }
+
+        /* Booking / Contact Submit Button */
+        #book-now-button,
+        .contact-form button[type="submit"] {
+            background: linear-gradient(90deg, #FFD700, #C0C0C0); /* Gold to Silver Gradient */
+            color: #000; /* Black text on button for contrast */
+            font-weight: bold;
+            padding: 1rem 2.5rem; /* More padding */
+            border-radius: 0.75rem; /* More rounded */
+            font-size: 1.25rem; /* Larger font */
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            position: relative;
+            overflow: hidden;
+            border: none; /* Remove default border */
+        }
+        #book-now-button:hover,
+        .contact-form button[type="submit"]:hover {
+            background: linear-gradient(90deg, #C0C0C0, #FFD700); /* Reverse gradient on hover */
+            transform: translateY(-5px) scale(1.02); /* Lift and slight scale */
+            box-shadow: 0 12px 25px rgba(192, 192, 192, 0.6); /* Silver glow */
+        }
+        #book-now-button::before,
+        .contact-form button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3); /* Shimmer effect */
+            transform: skewX(-20deg);
+            transition: all 0.5s ease;
+        }
+        #book-now-button:hover::before,
+        .contact-form button[type="submit"]::before {
+            left: 100%;
+        }
+        #book-now-button.disabled {
+            background: #444; /* Darker disabled background */
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+            opacity: 0.6;
+            color: #888; /* Darker text on disabled button */
+        }
+        #book-now-button.disabled::before {
+            display: none;
+        }
+
+        /* Appointment Platform Icons */
+        .platform-icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .platform-icon-container:hover {
+            background-color: rgba(255,255,255,0.15);
+            border-color: #FFD700; /* Gold */
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        /* Style for selected platform icon */
+        .platform-icon-container.selected {
+            background-color: rgba(255,215,0,0.2) !important; /* Light gold background for selected */
+            border-color: #FFD700 !important; /* Gold border for selected */
+            box-shadow: 0 0 15px rgba(255,215,0,0.7) !important; /* Gold glow for selected */
+            transform: scale(1.05);
+        }
+        .platform-icon-container i {
+            font-size: 3.5rem; /* Slightly smaller for balance */
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            color: #FFD700; /* Default gold icon color */
+        }
+        .platform-icon-container:hover i,
+        .platform-icon-container.selected i { /* Icon color on hover AND when selected */
+            color: #C0C0C0; /* Changed to Silver on hover/selected */
+            transform: scale(1.1);
+        }
+        .platform-icon-container span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Social media links in Contact section - refined hover */
+        .contact-social-links .social-icon-hover {
+            font-size: 3rem; /* Slightly smaller for consistency */
+            padding: 0.75rem;
+            border-radius: 50%; /* Make them truly round */
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .contact-social-links .social-icon-hover:hover {
+            transform: translateY(-5px) rotate(0deg); /* No rotation on hover */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+        .contact-social-links .social-icon-hover::before {
+            border-radius: 50%; /* Ensure shimmer is round */
+        }
+        /* Specific hover colors for each social icon to match their brand colors */
+        .contact-social-links .fa-behance-square:hover { color: #1769ff; }
+        .contact-social-links .fa-linkedin:hover { color: #0a66c2; }
+        .contact-social-links .fa-dribbble-square:hover { color: #ea4c89; }
+        .contact-social-links .fa-instagram-square:hover { color: #E1306C; }
+
+
+        /* Styles for the new confirmation modals */
+        .confirmation-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Darker overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .confirmation-modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .confirmation-modal-content {
+            background-color: #171717; /* Dark background */
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            border: 2px solid #FFD700; /* Gold border */
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); /* Gold glow */
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s ease;
+            position: relative;
+            max-width: 500px;
+            width: 90%; /* Responsive width */
+        }
+        .confirmation-modal-overlay.visible .confirmation-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .confirmation-modal-close-button {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 2rem; /* Larger close button */
+            color: #C0C0C0; /* Silver color */
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .confirmation-modal-close-button:hover {
+            opacity: 1;
+            color: #FFD700; /* Gold on hover */
+            transform: rotate(90deg);
+        }
+        .confirmation-modal-content .modal-icon {
+            font-size: 4rem; /* Larger icon */
+            color: #FFD700; /* Gold icon color */
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: modal-icon-bounce 0.8s ease-out; /* Bounce animation */
+        }
+        @keyframes modal-icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .confirmation-modal-content h3 {
+            font-family: 'Orbitron', sans-serif; /* Title font */
+            font-size: 2.5rem; /* Larger title */
+            color: #FFD700; /* Gold title */
+            margin-bottom: 1rem;
+        }
+        .confirmation-modal-content p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #E0E0E0; /* Lighter text for readability */
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .confirmation-modal-content button {
+            background: linear-gradient(90deg, #FFD700, #C0C0C0); /* Gold to Silver gradient button */
+            color: #000; /* Black text on button */
+            font-family: 'Orbitron', sans-serif; /* Button font */
+            font-weight: bold;
+            padding: 0.85rem 2.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+        .confirmation-modal-content button:hover {
+            background: linear-gradient(90deg, #C0C0C0, #FFD700); /* Reverse gradient on hover */
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Global Abstract Background -->
+    <div id="global-abstract-background"></div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <span class="text-sm">Scorri per esplorare</span>
+        <i class="fas fa-chevron-down text-2xl"></i>
+    </div>
+
+    <!-- Sidebar Navigazione -->
+    <div class="sidebar-nav" id="sidebar-nav">
+        <div class="sidebar-nav-item" data-section="hero"></div>
+        <div class="sidebar-nav-item" data-section="about"></div>
+        <div class="sidebar-nav-item" data-section="project-1"></div>
+        <div class="sidebar-nav-item" data-section="project-2"></div>
+        <div class="sidebar-nav-item" data-section="project-3"></div>
+        <div class="sidebar-nav-item" data-section="services"></div>
+        <div class="sidebar-nav-item" data-section="contact-booking"></div> <!-- Updated data-section -->
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="full-screen-section bg-black text-white relative">
+        <!-- Logo -->
+        <div class="hero-logo-wrapper">
+            <img src="as.png" alt="Logo Alberto Stocco" class="hero-logo-img">
+        </div>
+
+        <!-- Elementi grafici astratti -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <div class="abstract-element abstract-element-1"></div>
+            <div class="abstract-element abstract-element-2"></div>
+            <div class="abstract-element abstract-element-3"></div>
+            <div class="abstract-line-1"></div>
+            <div class="abstract-line-2"></div>
+            <svg class="absolute top-1/2 left-1/2 w-full h-full transform -translate-x-1/2 -translate-y-1/2 z-0 opacity-10" viewBox="0 0 1000 1000">
+                <path d="M 100 200 C 300 0, 700 0, 900 200 S 1100 400, 900 600 S 700 800, 500 800 S 300 800, 100 600 S -100 400, 100 200" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="1000" stroke-dashoffset="1000" id="hero-line"></path>
+            </svg>
+        </div>
+
+        <!-- Testo "PORTFOLIO" di sfondo -->
+        <h2 class="font-display hero-portfolio-text" id="portfolio-bg-text">PORTFOLIO</h2>
+
+        <div class="container mx-auto px-4 text-center z-10 relative">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 font-display hero-title">ALBERTO STOCCO</h1>
+            <p class="text-xl md:text-2xl lg:text-3xl mb-8 accent-gold" id="hero-description">Graphic Designer | Visual Storyteller | Motion Graphics Enthusiast</p> <!-- Gold -->
+            <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 font-display" id="hero-subtitle">GRAPHIC DESIGN + ILLUSTRATION</h2>
+            <p class="text-lg md:text-xl" id="hero-phrase">some of my work and personal projects. I hope you like them!</p>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="full-screen-section text-white relative py-16">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 z-10">
+            <div class="md:w-1/3 relative text-center md:text-left about-image-container p-4">
+                <!-- Immagine di Alberto Stocco con elementi grafici -->
+                <img src="profilo.jpg" alt="Alberto Stocco" class="w-full max-w-xs mx-auto rounded-xl shadow-lg transform rotate-3 relative z-10 border-4 border-white-500 about-me-image">
+                <div class="about-abstract-square absolute top-10 left-0 transform -rotate-15"></div>
+                <div class="about-abstract-square absolute bottom-5 right-5 transform rotate-30"></div>
+                <div class="about-abstract-line absolute top-1/4 left-1/4 w-3/4 transform rotate-45"></div>
+                <div class="about-abstract-line absolute bottom-1/4 right-1/4 w-3/4 transform -rotate-45"></div>
+            </div>
+            <div class="md:w-2/3 about-text">
+                <h2 class="text-5xl md:text-6xl font-bold mb-8 font-display about-me-title">Chi Sono</h2>
+                <div class="glitch-text-wrapper mb-4">
+                    <p class="text-lg leading-relaxed glitch-text" data-text="Ciao! Sono Alberto Stocco, un graphic designer con una passione bruciante per tutto ciò che è visivo. Fin da bambino, sono stato affascinato dal modo in cui le immagini e i colori possono raccontare storie, evocare emozioni e connettere le persone.">Ciao! Sono <span class="accent-gold font-bold">Alberto Stocco</span>, un graphic designer con una passione bruciante per tutto ciò che è visivo. Fin da bambino, sono stato affascinato dal modo in cui le immagini e i colori possono raccontare storie, evocare emozioni e connettere le persone.</p> <!-- Gold -->
+                </div>
+                <div class="glitch-text-wrapper mb-4">
+                    <p class="text-lg leading-relaxed glitch-text" data-text="La mia filosofia di design si basa sull'idea che ogni progetto sia una nuova tela bianca, un'opportunità per esplorare soluzioni creative uniche che non solo soddisfano le esigenze del cliente, ma superano le aspettative.">La mia filosofia di design si basa sull'idea che ogni progetto sia una nuova tela bianca, un'opportunità per esplorare soluzioni creative uniche che non solo soddisfano le esigenze del cliente, ma superano le aspettative.</p>
+                </div>
+                <div class="glitch-text-wrapper mb-4">
+                    <p class="text-lg leading-relaxed glitch-text" data-text="Amo sperimentare con forme, tipografie e animazioni per creare esperienze visive che rimangano impresse. Che si tratti di un logo, di un banner pubblicitario o di un'intera identità di brand, il mio obiettivo è sempre quello di lasciare un segno distintivo.">Amo sperimentare con forme, tipografie e animazioni per creare esperienze visive che rimangano impresse. Che si tratti di un logo, di un banner pubblicitario o di un'intera identità di brand, il mio obiettivo è sempre quello di lasciare un segno distintivo.</p>
+                </div>
+                <h3 class="text-3xl font-bold mt-8 mb-4 font-display">Strumenti e Software Preferiti</h3>
+                <div class="flex flex-wrap gap-4 text-xl tool-list">
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-silver group"> <!-- Silver border -->
+                        <i class="fas fa-image tool-icon"></i>Adobe Photoshop
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-gold group"> <!-- Gold border -->
+                        <i class="fas fa-pen-nib tool-icon"></i>Adobe Illustrator
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-silver group"> <!-- Silver border -->
+                        <i class="fas fa-book tool-icon"></i>Adobe InDesign
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-gold group"> <!-- Gold border -->
+                        <i class="fas fa-video tool-icon"></i>Adobe After Effects
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-silver group"> <!-- Silver border -->
+                        <i class="fab fa-figma tool-icon"></i>Figma
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-neutral-800 border border-accent-gold group"> <!-- Gold border -->
+                        <i class="fas fa-cube tool-icon"></i>Blender (base)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Section 1 -->
+    <section id="project-1" class="full-screen-section text-white relative py-16">
+        <div class="project-number-bg">01</div>
+        <div class="container mx-auto px-4 project-section-layout z-10">
+            <div class="md:order-2 project-description">
+                <p class="text-sm uppercase mb-2 accent-gold">Project Category</p> <!-- Gold -->
+                <h3 class="font-bold mb-4 font-display project-title-stylized">
+                    Royal Fabric - Brand Identity per Abbigliamento
+                    <i class="fas fa-bolt icon"></i> <!-- Lightning bolt icon -->
+                </h3>
+                <div class="project-tags mb-4">
+                    <span class="text-neutral-400">* design</span>
+                    <span class="text-neutral-400">* branding</span>
+                </div>
+                <p class="text-lg mb-4 project-text-paragraph">Brief del Cliente: Sviluppare un'identità visiva completa per Royal Fabric, un brand di abbigliamento che unisce eleganza classica e design contemporaneo. L'obiettivo era comunicare lusso, qualità e distinzione con un approccio innovativo e minimalista.</p>
+                <p class="text-lg mb-4 project-text-paragraph">Mio Ruolo: Graphic Designer. Ho curato in autonomia tutte le fasi del progetto, dalla concezione alla realizzazione del logo, della palette colori, della tipografia e delle linee guida di applicazione del brand.</p>
+                <p class="text-lg project-text-paragraph">Soluzioni Creative: Ho creato un logo dinamico che si adatta a diverse applicazioni, utilizzando forme geometriche pulite e una palette colori sofisticata per simboleggiare eleganza e modernità. Ho sviluppato un sistema visivo coerente e versatile, applicabile a packaging, etichette e materiali promozionali. </p>
+            </div>
+            <div class="md:order-1 relative project-image-stack">
+                <img src="scarpe.png" alt="Mockup Logo Brand Identity XYZ" class="w-full h-auto rounded-xl transform rotate-3 z-10 project-main-image">
+                <img src="polo.png" alt="Biglietto da Visita Brand Identity XYZ" class="project-secondary-image rounded-xl">
+                <img src="packagin.png" alt="GIF Animata UI Progetto 1" class="project-secondary-image rounded-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Section 2 -->
+    <section id="project-2" class="full-screen-section text-white relative py-16">
+        <div class="project-number-bg">02</div>
+        <div class="container mx-auto px-4 project-section-layout z-10">
+            <div class="md:order-1 project-description">
+                <p class="text-sm uppercase mb-2 accent-silver">Project Category</p> <!-- Silver -->
+                <h3 class="font-bold mb-4 font-display project-title-stylized">
+                    Agrifesta: Identità Visiva e Materiali Promozionali
+                    <i class="fas fa-star icon"></i> <!-- Star icon -->
+                </h3>
+                <div class="project-tags mb-4">
+                    <span class="text-neutral-400">* ui/ux</span>
+                    <span class="text-neutral-400">* web design</span>
+                </div>
+                <p class="text-lg mb-4 project-text-paragraph">Brief del Cliente: Creare un'identità visiva distintiva e materiali di comunicazione per "Agrifesta", una sagra annuale di Mirano-Campocroce, con l'obiettivo di promuovere le tradizioni agricole e il programma dell'evento</p>
+                <p class="text-lg mb-4 project-text-paragraph">Mio Ruolo: Graphic Designer. Ho gestito l'ideazione e la realizzazione del logo, della locandina ufficiale, del menu  e di altri materiali grafici  e del libretto sponsor, curando l'intera immagine coordinata dell'evento.</p>
+                <p class="text-lg project-text-paragraph">Soluzioni Creative: Ho sviluppato un logo che unisce simboli agricoli (come la spiga) a un design pulito, rappresentando tradizione e dinamicità. La locandina  e il menu  utilizzano una palette colori calda e terrosa e una tipografia chiara per comunicare efficacemente il programma e le informazioni. Ho creato un sistema visivo coerente per tutti i touchpoint dell'evento.</p>
+            </div>
+            <div class="md:order-2 relative project-image-stack">
+                <img src="locandina.png" alt="Web Design Progetto 2" class="w-full h-auto rounded-xl transform -rotate-2 z-10 project-main-image">
+                <img src="spigapiù grande.png" alt="Mobile App Progetto 2" class="project-secondary-image rounded-xl">
+                <img src="risto.png" alt="UI Element Progetto 2" class="project-secondary-image rounded-xl"> <!-- Gold placeholder -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Section 3 -->
+    <section id="project-3" class="full-screen-section text-white relative py-16">
+        <div class="project-number-bg">03</div>
+        <div class="container mx-auto px-4 project-section-layout z-10">
+            <div class="md:order-2 project-description">
+                <p class="text-sm uppercase mb-2 accent-gold">Project Category</p> <!-- Gold -->
+                <h3 class="font-bold mb-4 font-display project-title-stylized">
+                    XDVR Reloaded - Redesign Album Art & Packaging
+                    <i class="fas fa-magic icon"></i> <!-- Magic icon -->
+                </h3>
+                <div class="project-tags mb-4">
+                    <span class="text-neutral-400">* illustration</span>
+                    <span class="text-neutral-400">* editorial</span>
+                </div>
+                <p class="text-lg mb-4 project-text-paragraph">Brief del Cliente: Rinnovare l'immagine visiva dell'album "XDVR" con un concept "Reloaded" per un pubblico moderno, adattandolo per l'edizione in vinile e CD.</p>
+                <p class="text-lg mb-4 project-text-paragraph">Mio Ruolo: Graphic Designer. Ho curato la creazione della copertina, delle etichette per vinile e CD, e il design complessivo del packaging per entrambi i formati.</p>
+                <p class="text-lg project-text-paragraph">Soluzioni Creative: Ho sviluppato una copertina d'impatto con elementi urbani, tipografia audace e colori vivaci per un effetto "reloaded". Il design è stato adattato per ottimizzare l'impatto visivo sia sul vinile che sul CD, garantendo coerenza e riconoscibilità del brand musicale su entrambi i supporti fisici.</p>
+            </div>
+            <div class="md:order-1 relative project-image-stack">
+                <img src="xdvr.png" alt="Illustrazione Principale Progetto 3" class="w-full h-auto rounded-xl transform rotate-5 z-10 project-main-image">
+                <img src="cd xdvr remake.png" alt="Dettaglio Illustrazione Progetto 3" class="project-secondary-image rounded-xl">
+                <img src="Mockup Vinile XDVR.png" alt="Concept Sketch Progetto 3" class="project-secondary-image rounded-xl"> <!-- Silver placeholder -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="full-screen-section text-white relative py-16">
+        <div class="container mx-auto px-4 text-center z-10">
+            <h2 class="text-5xl md:text-6xl font-bold mb-12 font-display">I miei Servizi</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Servizio 1 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-gold text-5xl mb-4"><i class="fas fa-brush"></i></div> <!-- Gold icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Brand Identity</h3>
+                    <p class="text-lg text-neutral-400">Creazione di un'identità visiva coesa e memorabile per il tuo brand, dal logo al manuale d'uso.</p>
+                </div>
+                <!-- Servizio 2 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-silver text-5xl mb-4"><i class="fas fa-cubes"></i></div> <!-- Silver icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Packaging Design</h3>
+                    <p class="text-lg text-neutral-400">Design di packaging innovativi e accattivanti che valorizzano il tuo prodotto sullo scaffale.</p>
+                </div>
+                <!-- Servizio 3 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-gold text-5xl mb-4"><i class="fas fa-laptop-code"></i></div> <!-- Gold icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Web Graphics & UI/UX</h3>
+                    <p class="text-lg text-neutral-400">Elementi grafici per il web, design di interfacce utente intuitive e coinvolgenti.</p>
+                </div>
+                <!-- Servizio 4 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-silver text-5xl mb-4"><i class="fas fa-paint-brush"></i></div> <!-- Silver icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Illustrazione</h3>
+                    <p class="text-lg text-neutral-400">Illustrazioni personalizzate per editoria, pubblicità o progetti speciali, in diversi stili.</p>
+                </div>
+                <!-- Servizio 5 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-gold text-5xl mb-4"><i class="fas fa-share-alt"></i></div> <!-- Gold icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Social Media Graphics</h3>
+                    <p class="text-lg text-neutral-400">Creazione di grafiche ottimizzate per le piattaforme social, che catturano l'attenzione e aumentano l'engagement.</p>
+                </div>
+                <!-- Servizio 6 -->
+                <div class="bg-neutral-900 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 service-card">
+                    <div class="accent-silver text-5xl mb-4"><i class="fas fa-lightbulb"></i></div> <!-- Silver icon -->
+                    <h3 class="text-3xl font-bold mb-2 font-display">Concept Art & Motion Graphics</h3>
+                    <p class="text-lg text-neutral-400">Dall'idea al movimento: sviluppo di concept visivi e animazioni per video, presentazioni e web.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuova Sezione Unificata: Contatto e Prenotazione -->
+    <section id="contact-booking" class="full-screen-section text-white relative py-16">
+        <div class="container mx-auto px-4 text-center z-10">
+            <!-- Parte "Fissiamo una Call" -->
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 font-display text-white">Fissiamo una Call</h2>
+            <p class="text-xl mb-12 text-white">Scegli la data e l'orario più comodi per te per una consulenza gratuita. Iniziamo a creare insieme!</p>
+
+            <div class="max-w-3xl mx-auto px-4 py-8">
+                <h3 class="text-4xl font-bold mb-6 font-display accent-gold">Seleziona Data e Orario</h3> <!-- Gold -->
+                <input type="text" id="datepicker" class="hidden">
+
+                <div id="time-slots" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-8">
+                    <!-- Gli slot orari verranno generati qui dal JavaScript -->
+                </div>
+                <p id="no-slots-message" class="text-neutral-400 mt-4 hidden">Nessuno slot disponibile per la data selezionata. Scegli un altro giorno.</p>
+
+                <form id="booking-form" class="mt-10">
+                    <h3 class="text-3xl font-bold mb-6 font-display text-white">I Tuoi Dati</h3>
+                    <input type="text" id="booking-name" placeholder="Il tuo nome" class="w-full p-3 rounded-md bg-transparent border border-gray-600 text-white placeholder-gray-400 mb-4 focus:border-accent-gold focus:outline-none" required> <!-- Gold focus -->
+                    <input type="email" id="booking-email" placeholder="La tua email" class="w-full p-3 rounded-md bg-transparent border border-gray-600 text-white placeholder-gray-400 mb-6 focus:border-accent-gold focus:outline-none" required> <!-- Gold focus -->
+                    
+                    <!-- New div for platform specific contact input -->
+                    <div id="platform-contact-input-container" class="mb-6" style="display: none;">
+                        <input type="text" id="platform-contact-input" class="w-full p-3 rounded-md bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:border-accent-gold focus:outline-none" placeholder="Il tuo contatto su [Piattaforma]">
+                    </div>
+
+                    <button type="submit" id="book-now-button" class="bg-accent-gold text-white font-bold py-3 px-8 rounded-full text-xl hover:bg-accent-silver transition-colors duration-300 transform hover:scale-105 w-full disabled:opacity-50 disabled:cursor-not-allowed"> <!-- Gold to Silver -->
+                        Prenota Ora
+                    </button>
+                </form>
+
+                <div class="mt-12 text-center">
+                    <h3 class="text-3xl font-bold mb-4 font-display text-white">L'appuntamento avverrà su:</h3>
+                    <p class="text-lg mb-4 text-neutral-400">Ti contatterò sulla piattaforma scelta all'orario concordato.</p>
+                    <div class="flex flex-wrap justify-center gap-6 text-5xl" id="platform-icons-container">
+                        <div class="flex flex-col items-center group platform-icon-container" data-platform="Discord" data-placeholder="Il tuo username Discord">
+                            <i class="fab fa-discord transition-colors duration-300 transform"></i>
+                            <span class="text-sm mt-2 text-white">Discord</span>
+                        </div>
+                        <div class="flex flex-col items-center group platform-icon-container" data-platform="Instagram" data-placeholder="Il tuo @username Instagram">
+                            <i class="fab fa-instagram transition-colors duration-300 transform"></i>
+                            <span class="text-sm mt-2 text-white">Instagram</span>
+                        </div>
+                        <div class="flex flex-col items-center group platform-icon-container" data-platform="WhatsApp" data-placeholder="Il tuo numero WhatsApp (es. +39...)">
+                            <i class="fab fa-whatsapp transition-colors duration-300 transform"></i>
+                            <span class="text-sm mt-2 text-white">WhatsApp</span>
+                        </div>
+                        <div class="flex flex-col items-center group platform-icon-container" data-platform="Telegram" data-placeholder="Il tuo username Telegram">
+                            <i class="fab fa-telegram-plane transition-colors duration-300 transform"></i>
+                            <span class="text-sm mt-2 text-white">Telegram</span>
+                        </div>
+                        <div class="flex flex-col items-center group platform-icon-container" data-platform="Teams" data-placeholder="La tua email/contatto Teams">
+                            <i class="fas fa-handshake transition-colors duration-300 transform"></i>
+                            <span class="text-sm mt-2 text-white">Microsoft Teams</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parte "Contattami" -->
+            <div class="mt-20 pt-16 border-t border-neutral-700"> <!-- Added margin-top and top border for separation -->
+                <h2 class="text-5xl md:text-6xl font-bold mb-8 font-display">Hai un'idea? Contattami!</h2> <!-- Rephrased title -->
+                <p class="text-lg mb-8 text-neutral-400">Sono sempre pronto per nuove sfide creative.</p>
+
+                <form class="contact-form max-w-xl mx-auto grid grid-cols-1 gap-6" id="contact-form-main"> <!-- Added ID -->
+                    <input type="text" placeholder="Nome" class="w-full" required>
+                    <input type="email" placeholder="Email" class="w-full" required>
+                    <input type="text" placeholder="Oggetto" class="w-full" required>
+                    <textarea placeholder="Il tuo messaggio..." rows="6" class="w-full" required></textarea>
+                    <button type="submit" class="bg-accent-gold text-white font-bold py-3 px-8 rounded-full text-xl hover:bg-accent-silver transition-colors duration-300 transform hover:scale-105"> <!-- Gold to Silver -->
+                        Invia Messaggio
+                    </button>
+                </form>
+
+                <div class="mt-12">
+                    <h3 class="text-3xl font-bold mb-6 font-display">Trovami sui Social</h3>
+                    <div class="flex justify-center gap-8 text-4xl contact-social-links">
+                        <a href="https://www.behance.net/" target="_blank" class="text-white social-icon-hover">
+                            <i class="fab fa-behance-square"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/" target="_blank" class="text-white social-icon-hover">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://dribbble.com/" target="_blank" class="text-white social-icon-hover">
+                            <i class="fab fa-dribbble-square"></i>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" class="text-white social-icon-hover">
+                            <i class="fab fa-instagram-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL POPUP: Booking Confirmation -->
+    <div id="booking-confirmation-modal-overlay" class="confirmation-modal-overlay">
+        <div class="confirmation-modal-content">
+            <button class="confirmation-modal-close-button">&times;</button>
+            <i class="fas fa-check-circle modal-icon"></i>
+            <h3>Appuntamento Confermato!</h3>
+            <p>Grazie per aver prenotato con Alberto Stocco.<br>Riceverai una conferma via email con tutti i dettagli dell'appuntamento.<br>Ti contatterò presto all'orario e sulla piattaforma scelta.</p>
+            <button class="modal-ok-button">
+                Perfetto!
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: Contact Form Confirmation -->
+    <div id="contact-confirmation-modal-overlay" class="confirmation-modal-overlay">
+        <div class="confirmation-modal-content">
+            <button class="confirmation-modal-close-button">&times;</button>
+            <i class="fas fa-paper-plane modal-icon"></i>
+            <h3>Messaggio Inviato!</h3>
+            <p>Grazie per il tuo messaggio! Ti contatteremo al più presto per discutere la tua idea.</p>
+            <button class="modal-ok-button">
+                Ok!
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Caricamento di Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Registra i plugin GSAP
+        gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+        // GLOBAL ABSTRACT BACKGROUND ANIMATIONS
+        function setupGlobalBackgroundAnimations() {
+            const backgroundContainer = document.getElementById('global-abstract-background');
+            const numParticles = 50;
+            const numLines = 20;
+
+            // Create particles
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('bg-particle');
+                if (i % 3 === 0) {
+                    particle.style.backgroundColor = 'rgba(255, 215, 0, 0.05)'; /* Gold accent */
+                } else if (i % 3 === 1) {
+                    particle.style.backgroundColor = 'rgba(192, 192, 192, 0.05)'; /* Silver accent */
+                } else {
+                    particle.style.backgroundColor = 'rgba(255, 255, 255, 0.05)'; /* White */
+                }
+                backgroundContainer.appendChild(particle);
+
+                // Set initial random position
+                gsap.set(particle, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * document.body.scrollHeight, // Span entire scrollable height
+                    opacity: 0
+                });
+
+                // Animate opacity and movement
+                gsap.to(particle, {
+                    opacity: 0.05 + Math.random() * 0.05,
+                    x: `+=${(Math.random() - 0.5) * window.innerWidth * 0.2}`,
+                    y: `+=${(Math.random() - 0.5) * document.body.scrollHeight * 0.1}`,
+                    duration: 20 + Math.random() * 20,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                    delay: Math.random() * 10
+                });
+
+                // Parallax for particles
+                gsap.to(particle, {
+                    y: `+=${(Math.random() - 0.5) * 200}`, // Move a bit more on scroll
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "body",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1,
+                        markers: false
+                    }
+                });
+            }
+
+            // Create lines
+            for (let i = 0; i < numLines; i++) {
+                const line = document.createElement('div');
+                line.classList.add('bg-line-bg'); // Changed class name
+                if (i % 2 === 0) {
+                    line.style.background = 'linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), transparent)'; /* Gold accent */
+                } else {
+                    line.style.background = 'linear-gradient(to right, transparent, rgba(192, 192, 192, 0.1), transparent)'; /* Silver accent */
+                }
+                backgroundContainer.appendChild(line);
+
+                // Set initial random position and rotation
+                gsap.set(line, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * document.body.scrollHeight,
+                    rotation: Math.random() * 360,
+                    opacity: 0
+                });
+
+                // Animate opacity and movement
+                gsap.to(line, {
+                    opacity: 0.03 + Math.random() * 0.02,
+                    x: `+=${(Math.random() - 0.5) * window.innerWidth * 0.1}`,
+                    y: `+=${(Math.random() - 0.5) * document.body.scrollHeight * 0.05}`,
+                    rotation: `+=${(Math.random() - 0.5) * 180}`,
+                    duration: 30 + Math.random() * 20,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                    delay: Math.random() * 15
+                });
+
+                // Parallax for lines (less movement than particles)
+                gsap.to(line, {
+                    y: `+=${(Math.random() - 0.5) * 100}`,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "body",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1.5, // Slower parallax
+                        markers: false
+                    }
+                });
+            }
+        }
+
+        // Funzione per animare elementi quando entrano nella vista (generica)
+        function setupElementAnimations(elements, delay = 0, triggerElement = null) {
+            elements.forEach((el, i) => {
+                const initialY = el.classList.contains('fade-in-up') ? 50 : 0;
+                const initialX = el.classList.contains('slide-in-left') ? -100 : (el.classList.contains('slide-in-right') ? 100 : 0);
+                const duration = 1;
+                const ease = "power3.out";
+
+                gsap.fromTo(el,
+                    { opacity: 0, y: initialY, x: initialX, rotate: (Math.random() - 0.5) * 10 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        x: 0,
+                        rotate: 0,
+                        duration: duration,
+                        ease: ease,
+                        delay: delay * i,
+                        scrollTrigger: {
+                            trigger: triggerElement || el,
+                            start: "top 85%",
+                            toggleActions: "play none none reverse",
+                            markers: false
+                        }
+                    }
+                );
+            });
+        }
+
+        // Funzione per l'effetto glitch sul testo (attiva/disattiva)
+        function setupGlitchTextAnimation() {
+            const glitchWrappers = document.querySelectorAll('.glitch-text-wrapper');
+
+            glitchWrappers.forEach(wrapper => {
+                const textElement = wrapper.querySelector('.glitch-text');
+                if (!textElement) return;
+
+                ScrollTrigger.create({
+                    trigger: wrapper,
+                    start: "top 85%",
+                    end: "bottom 15%",
+                    onEnter: () => textElement.classList.add('active'),
+                    onLeaveBack: () => textElement.classList.remove('active'),
+                    onLeave: () => textElement.classList.remove('active'),
+                    onEnterBack: () => textElement.classList.add('active'),
+                    markers: false
+                });
+            });
+        }
+
+        // Variabili per la gestione della prenotazione
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedPlatform = null; // New variable to store selected platform
+        
+        // Dati fittizi per gli orari occupati
+        const bookedAppointments = [
+            { date: '2025-06-28', time: '10:30' },
+            { date: '2025-06-28', time: '15:30' },
+            { date: '2025-07-01', time: '11:00' },
+            { date: '2025-07-05', time: '16:00' }
+        ];
+
+        // Orari disponibili
+        const availableTimeSlots = [
+            '10:00', '10:30', '11:00', '11:30', '12:00',
+            '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'
+        ];
+
+        // Function to update the disabled state of the book now button
+        function updateBookButtonState() {
+            const bookNowButton = document.getElementById('book-now-button');
+            const bookingName = document.getElementById('booking-name').value;
+            const bookingEmail = document.getElementById('booking-email').value;
+            const platformContactInput = document.getElementById('platform-contact-input');
+            
+            // Check if platformContactInput exists and is visible before checking its value
+            const isPlatformContactFilled = platformContactInput && window.getComputedStyle(platformContactInput.closest('div')).display !== 'none' ? platformContactInput.value.trim() !== '' : true;
+
+            bookNowButton.disabled = !(selectedDate && selectedTime && bookingName && bookingEmail && selectedPlatform && isPlatformContactFilled);
+        }
+
+
+        // Funzione per generare i pulsanti degli slot orari
+        function renderTimeSlots(date) {
+            const timeSlotsContainer = document.getElementById('time-slots');
+            timeSlotsContainer.innerHTML = '';
+            const noSlotsMessage = document.getElementById('no-slots-message');
+            noSlotsMessage.classList.add('hidden');
+
+            let hasAvailableSlots = false;
+
+            availableTimeSlots.forEach(slot => {
+                const isBooked = bookedAppointments.some(
+                    app => app.date === date && app.time === slot
+                );
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = slot;
+                button.classList.add('time-slot-button');
+                if (isBooked) {
+                    button.classList.add('disabled');
+                    button.disabled = true;
+                } else {
+                    button.addEventListener('click', () => {
+                        document.querySelectorAll('.time-slot-button').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+                        button.classList.add('selected');
+                        selectedTime = slot;
+                        updateBookButtonState(); // Update button state after time selection
+                    });
+                    hasAvailableSlots = true;
+                }
+                timeSlotsContainer.appendChild(button);
+            });
+
+            if (!hasAvailableSlots) {
+                noSlotsMessage.classList.remove('hidden');
+            }
+        }
+
+        // Inizializzazione Flatpickr
+        flatpickr("#datepicker", {
+            dateFormat: "Y-m-d",
+            inline: true, // Mostra il calendario in linea
+            showMonths: 2, // Mostra due mesi affiancati
+            minDate: new Date().setDate(new Date().getDate() + 3),
+            disable: [
+                function(date) {
+                    return (date.getDay() === 0 || date.getDay() === 6); // Disabilita Sabato (6) e Domenica (0)
+                }
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    selectedDate = dateStr;
+                    renderTimeSlots(selectedDate);
+                    selectedTime = null;
+                    updateBookButtonState(); // Update button state after date selection
+                }
+            }
+        });
+
+        // Platform selection logic
+        const platformIcons = document.querySelectorAll('#platform-icons-container .platform-icon-container');
+        const platformContactInputContainer = document.getElementById('platform-contact-input-container');
+        const platformContactInput = document.getElementById('platform-contact-input');
+
+        platformIcons.forEach(iconContainer => {
+            iconContainer.addEventListener('click', () => {
+                // Remove 'selected' class from all other platform icons
+                platformIcons.forEach(item => item.classList.remove('selected'));
+                // Add 'selected' class to the clicked platform icon
+                iconContainer.classList.add('selected');
+                
+                selectedPlatform = iconContainer.dataset.platform; // Get platform name
+                const placeholderText = iconContainer.dataset.placeholder; // Get specific placeholder
+
+                // Show and update the new input field
+                platformContactInput.placeholder = placeholderText;
+                gsap.to(platformContactInputContainer, { autoAlpha: 1, height: "auto", duration: 0.3, ease: "power2.out", onComplete: () => {
+                    platformContactInput.focus();
+                }});
+                
+                updateBookButtonState(); // Update button state after platform selection
+            });
+        });
+
+        // Event listener for the new platform contact input
+        platformContactInput.addEventListener('input', updateBookButtonState);
+
+        // Event listener for form inputs (name, email) to enable/disable the button
+        document.querySelectorAll('#booking-name, #booking-email').forEach(input => {
+            input.addEventListener('input', updateBookButtonState);
+        });
+
+        // Function to show a modal
+        function showConfirmationModal(modalId) {
+            const modalOverlay = document.getElementById(modalId);
+            if (modalOverlay) {
+                modalOverlay.classList.add('visible');
+                // Animate content when modal is visible
+                gsap.fromTo(modalOverlay.querySelector('.confirmation-modal-content'),
+                    { scale: 0.8, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+                );
+            }
+        }
+
+        // Function to hide a modal
+        function hideConfirmationModal(modalId) {
+            const modalOverlay = document.getElementById(modalId);
+            if (modalOverlay) {
+                gsap.to(modalOverlay.querySelector('.confirmation-modal-content'),
+                    {
+                        scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in",
+                        onComplete: () => {
+                            modalOverlay.classList.remove('visible');
+                        }
+                    }
+                );
+            }
+        }
+
+        // Event listeners for modal close buttons
+        document.querySelectorAll('.confirmation-modal-close-button, .modal-ok-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const modalId = event.target.closest('.confirmation-modal-overlay').id;
+                hideConfirmationModal(modalId);
+            });
+        });
+
+        // Function to send email (simulated - no actual email sent from frontend)
+        async function sendEmailSimulated(toEmail, subject, body) {
+            // In a real application, you would send this data to your backend server
+            // which would then handle sending the actual email using a service like SendGrid, Mailgun, etc.
+            console.log("SIMULAZIONE INVIO EMAIL:");
+            console.log(`A: ${toEmail}`);
+            console.log(`Oggetto: ${subject}`);
+            console.log(`Corpo: ${body}`);
+            console.log("--- FINE SIMULAZIONE ---");
+            // Always return true for frontend demonstration purposes
+            return true; 
+        }
+
+
+        // Gestione invio modulo di prenotazione
+        document.getElementById('booking-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('booking-name').value;
+            const email = document.getElementById('booking-email').value;
+            const platformContact = document.getElementById('platform-contact-input').value;
+
+            if (selectedDate && selectedTime && name && email && selectedPlatform && platformContact) {
+                // Construct email body for booking
+                const bookingBody = `Nuova prenotazione da ${name} (${email}).\n` +
+                                   `Data: ${selectedDate}\n` +
+                                   `Ora: ${selectedTime}\n` +
+                                   `Piattaforma: ${selectedPlatform}\n` +
+                                   `Contatto Piattaforma: ${platformContact}\n\n` +
+                                   `Messaggio generato automaticamente.`;
+
+                const emailSent = await sendEmailSimulated(
+                    'posta.alberto22@gmail.com', // Your target email
+                    `Nuova Prenotazione Call da ${name}`,
+                    bookingBody
+                );
+
+                if (emailSent) {
+                    console.log("Booking confirmed and simulated email sent.");
+                } else {
+                    console.error("Failed to send booking confirmation email (simulated). Check console for details.");
+                }
+                showConfirmationModal('booking-confirmation-modal-overlay'); // ALWAYS show booking confirmation modal for UX
+                
+                // Reset form and selections regardless of email sending success for UX
+                document.getElementById('booking-form').reset();
+                selectedDate = null;
+                selectedTime = null;
+                selectedPlatform = null; // Reset selected platform
+                platformContactInput.value = ''; // Clear the input field
+                document.getElementById('time-slots').innerHTML = '';
+                document.getElementById('book-now-button').disabled = true;
+                platformIcons.forEach(item => item.classList.remove('selected')); // Deselect all platform icons
+                gsap.to(platformContactInputContainer, { autoAlpha: 0, height: 0, duration: 0.3, ease: "power2.out" }); // Hide platform input
+                document.getElementById('no-slots-message').classList.add('hidden'); // Ensure message is hidden
+
+            } else {
+                console.log("Per favore, completa tutti i campi e seleziona una data, un orario e una piattaforma.");
+            }
+        });
+
+        // Gestione invio modulo di contatto (new listener)
+        document.getElementById('contact-form-main').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const name = this.querySelector('input[placeholder="Nome"]').value;
+            const email = this.querySelector('input[placeholder="Email"]').value;
+            const subject = this.querySelector('input[placeholder="Oggetto"]').value;
+            const message = this.querySelector('textarea[placeholder="Il tuo messaggio..."]').value;
+
+            if (name && email && subject && message) {
+                const contactBody = `Messaggio da ${name} (${email}).\n` +
+                                    `Oggetto: ${subject}\n` +
+                                    `Messaggio:\n${message}\n\n` +
+                                    `Messaggio generato automaticamente.`;
+
+                const emailSent = await sendEmailSimulated(
+                    'posta.alberto22@gmail.com', // Your target email
+                    `Nuovo Messaggio dal Portfolio: ${subject}`,
+                    contactBody
+                );
+
+                if (emailSent) {
+                    console.log("Contact form submitted and simulated email sent.");
+                } else {
+                    console.error("Failed to send contact email (simulated). Check console for details.");
+                }
+                showConfirmationModal('contact-confirmation-modal-overlay'); // ALWAYS show contact confirmation modal for UX
+                
+                this.reset(); // Reset the contact form regardless of email sending success for UX
+            } else {
+                console.log("Per favore, completa tutti i campi del modulo di contatto.");
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animazione della freccia di scroll nella Hero Section
+            const scrollIndicator = document.querySelector(".scroll-indicator");
+            // Set initial state for the scroll indicator
+            gsap.set(scrollIndicator, { opacity: 1, y: 0 }); // Ensure it's visible at start
+
+            // ScrollTrigger per nascondere lo scroll indicator quando la Hero Section esce dalla vista
+            ScrollTrigger.create({
+                trigger: "#hero",
+                start: "bottom bottom", // Trigger when the bottom of the hero section hits the bottom of the viewport
+                onUpdate: (self) => { // Use onUpdate to check scroll position precisely
+                    // Fade out as soon as scrollY is greater than a small threshold
+                    if (self.progress > 0.01) { // If scrolled even a tiny bit from the very top
+                        gsap.to(scrollIndicator, { opacity: 0, y: 50, duration: 0.5, ease: "power2.in" });
+                    } else {
+                        // If at the very top (or scrolled back to it)
+                        gsap.to(scrollIndicator, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+                    }
+                },
+                markers: false // Set to true for debugging ScrollTrigger
+            });
+
+
+            // Setup global background animations on DOMContentLoaded
+            setupGlobalBackgroundAnimations();
+
+            // Animazioni iniziali per la Hero Section (spostate qui per garantire l'esecuzione dopo il caricamento del DOM)
+            const heroLine = document.getElementById('hero-line');
+            if (heroLine) {
+                gsap.fromTo(heroLine,
+                    { strokeDashoffset: 1000 },
+                    { strokeDashoffset: 0, duration: 2, ease: "power2.out", delay: 0.5 }
+                );
+                gsap.to(heroLine, {
+                    attr: {
+                        d: "M 100 200 C 300 0, 700 0, 900 200 S 1100 400, 900 600 S 700 800, 500 800 S 300 800, 100 600 S -100 400, 100 200"
+                    },
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                    duration: 5,
+                    delay: 2.5,
+                    modifiers: {
+                        attr: (value) => {
+                            const points = value.match(/(\d+)/g).map(Number);
+                            const newPoints = points.map((p, i) => {
+                                if (i % 2 !== 0) {
+                                    return p + Math.sin(gsap.ticker.time * 0.5 + i * 0.1) * 5;
+                                }
+                                return p;
+                            });
+                            return `M ${newPoints[0]} ${newPoints[1]} C ${newPoints[2]} ${newPoints[3]}, ${newPoints[4]} ${newPoints[5]}, ${newPoints[6]} ${newPoints[7]} S ${newPoints[8]} ${newPoints[9]}, ${newPoints[10]} ${newPoints[11]} S ${newPoints[12]} ${newPoints[13]}, ${newPoints[14]} ${newPoints[15]} S ${newPoints[16]} ${newPoints[17]}, ${newPoints[18]} ${newPoints[19]} S ${newPoints[20]} ${newPoints[21]}, ${newPoints[22]} ${newPoints[23]}`;
+                        }
+                    }
+                });
+            }
+
+            gsap.fromTo(".abstract-element, .abstract-line-1, .abstract-line-2",
+                { opacity: 0, scale: 0.5, rotate: (i) => i * 30 + Math.random() * 90 },
+                {
+                    opacity: (i, target) => {
+                        if (target.classList.contains('abstract-element-1')) return 0.2;
+                        if (target.classList.contains('abstract-element-2')) return 0.15;
+                        if (target.classList.contains('abstract-element-3')) return 0.1;
+                        if (target.classList.contains('abstract-line-1') || target.classList.contains('abstract-line-2')) return 0.3;
+                        return 0.15;
+                    },
+                    scale: 1,
+                    rotate: (i, target) => {
+                        if (target.classList.contains('abstract-element-1')) return -30;
+                        if (target.classList.contains('abstract-element-2')) return 15;
+                        if (target.classList.contains('abstract-element-3')) return 45;
+                        if (target.classList.contains('abstract-line-1')) return -10;
+                        if (target.classList.contains('abstract-line-2')) return 5;
+                        return 0;
+                    },
+                    duration: 1.5,
+                    ease: "power2.out",
+                    delay: 0.7,
+                    stagger: 0.1,
+                    scrollTrigger: {
+                        trigger: "#hero",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1,
+                        markers: false
+                    }
+                }
+            );
+
+            // Set up a GSAP timeline for Hero section elements, including the logo animation
+            const heroIntroTimeline = gsap.timeline({ delay: 0.5 }); // Overall delay for the intro sequence
+
+            heroIntroTimeline.fromTo(".hero-title", // Main title animation
+                { opacity: 0, scale: 0.8, skewX: -20, filter: "blur(10px)" },
+                {
+                    opacity: 1, scale: 1, skewX: 0, filter: "blur(0px)",
+                    duration: 1.5, ease: "back.out(1.7)",
+                    onStart: function() {
+                        // Optional: small random glitch effect on the title on start
+                        gsap.to(this.targets()[0], {
+                            x: () => (Math.random() - 0.5) * 20, y: () => (Math.random() - 0.5) * 20,
+                            skewX: () => (Math.random() - 0.5) * 30, duration: 0.1, repeat: 3, yoyo: true, ease: "steps(1)"
+                        });
+                    }
+                }
+            )
+            .from("#hero-description", { opacity: 0, y: -30, duration: 1, ease: "power2.out" }, "-=0.8") // Overlap
+            .from("#hero-subtitle", { opacity: 0, y: -30, duration: 1, ease: "power2.out" }, "-=0.7") // Overlap
+            .from("#hero-phrase", { opacity: 0, y: -30, duration: 1, ease: "power2.out" }, "-=0.6") // Overlap
+            .fromTo(".hero-logo-wrapper", // Logo animation after text
+                { opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }, // Start small, centered
+                {
+                    opacity: 1, scale: 1,
+                    top: '2rem', // Final top position
+                    right: '2rem', // Final right position
+                    left: 'auto', // Ensure it moves from center to right
+                    x: 0, y: 0, // Reset transform once it's repositioned by top/right
+                    duration: 1.5,
+                    ease: "power3.out"
+                }, "-=1.0" // Start this animation concurrently with the last text animation or slightly after
+            );
+            // End of Hero Section text animations
+
+            // Animazione per la sezione About Me
+            const aboutSection = document.getElementById('about');
+            if (aboutSection) {
+                // Only select actual elements for animation to avoid errors
+                setupElementAnimations(aboutSection.querySelectorAll('h2, h3, .glitch-text-wrapper, .tool-list'), 0.2, aboutSection);
+                setupGlitchTextAnimation();
+
+                const albertoImage = aboutSection.querySelector('.about-me-image'); // Updated selector
+                if (albertoImage) {
+                    gsap.fromTo(albertoImage,
+                        { opacity: 0, scale: 0.5, filter: "brightness(0) grayscale(100%)" },
+                        {
+                            opacity: 1, scale: 1, filter: "brightness(1) grayscale(100%)", duration: 1.5, ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: albertoImage,
+                                start: "top 80%",
+                                toggleActions: "play none none reverse",
+                                markers: false,
+                                onStart: () => {
+                                    gsap.to(albertoImage, {
+                                        x: () => (Math.random() - 0.5) * 20, y: () => (Math.random() - 0.5) * 20,
+                                        skewX: () => (Math.random() - 0.5) * 30, duration: 0.1, repeat: 3, yoyo: true, ease: "steps(1)"
+                                    });
+                                }
+                            }
+                        }
+                    );
+                }
+                // Animate the new abstract elements around the about image
+                gsap.from(aboutSection.querySelectorAll('.about-abstract-square, .about-abstract-line'), {
+                    opacity: 0, scale: 0, rotate: (i) => (Math.random() * 360), stagger: 0.1, duration: 1, ease: "back.out(1.7)",
+                    scrollTrigger: { trigger: aboutSection.querySelector('.about-image-container'), start: "top 75%", toggleActions: "play none none reverse", markers: false }
+                });
+            }
+
+            // Animazioni per le sezioni Progetto
+            ['project-1', 'project-2', 'project-3'].forEach(id => {
+                const projectSection = document.getElementById(id);
+                if (projectSection) {
+                    gsap.from(projectSection.querySelectorAll('.project-description h3, .project-tags, .project-text-paragraph'), {
+                        opacity: 0, y: 30, stagger: 0.1, duration: 0.7, ease: "power2.out",
+                        scrollTrigger: { trigger: projectSection, start: "top 75%", toggleActions: "play none none reverse", markers: false }
+                    });
+
+                    const mainImage = projectSection.querySelector('.project-main-image');
+                    const secondaryImages = projectSection.querySelector('.project-image-stack').querySelectorAll('img:not(.project-main-image)');
+
+                    if (mainImage) {
+                        gsap.fromTo(mainImage, { opacity: 0, scale: 0.8, rotate: (Math.random() - 0.5) * 20 },
+                            { opacity: 1, scale: 1, rotate: (id === 'project-1' ? 3 : (id === 'project-2' ? -2 : 5)), duration: 1.2, ease: "back.out(1.7)",
+                                scrollTrigger: { trigger: projectSection, start: "top 80%", toggleActions: "play none none reverse", markers: false }
+                            }
+                        );
+                        gsap.fromTo(mainImage, {yPercent: -5}, { yPercent: 5, ease: "none", scrollTrigger: { trigger: projectSection, start: "top bottom", end: "bottom top", scrub: true } });
+                    }
+                    secondaryImages.forEach((img, i) => {
+                        let initialX = 0;
+                        let initialY = 0;
+                        let initialRotate = (Math.random() - 0.5) * 30;
+
+                        if (id === 'project-1') { // Default layout for project-1 and project-3
+                            initialX = i === 0 ? -50 : 50; // first secondary on left, second on right
+                            initialY = i === 0 ? 50 : -50;
+                            initialRotate = i === 0 ? -6 : 12;
+                        } else if (id === 'project-2') { // Reversed layout
+                            initialX = i === 0 ? 50 : -50; // first secondary on right, second on left
+                            initialY = i === 0 ? 50 : -50;
+                            initialRotate = i === 0 ? 6 : -8;
+                        }
+
+                        gsap.fromTo(img, { opacity: 0, scale: 0.7, rotate: initialRotate, x: initialX, y: initialY },
+                            { opacity: 1, scale: 1, rotate: (id === 'project-1' ? (i === 0 ? -6 : 12) : (id === 'project-2' ? (i === 0 ? 6 : -8) : (i === 0 ? -8 : 15))), x: 0, y: 0, duration: 1.2, ease: "back.out(1.7)", delay: 0.2 * i,
+                                scrollTrigger: { trigger: projectSection, start: "top 80%", toggleActions: "play none none reverse", markers: false }
+                            }
+                        );
+                        // Parallax for secondary images
+                        gsap.fromTo(img, {yPercent: (i % 2 === 0 ? 10 : -10)}, { yPercent: (i % 2 === 0 ? -10 : 10), ease: "none", scrollTrigger: { trigger: projectSection, start: "top bottom", end: "bottom top", scrub: true } });
+
+                        // Special effect for 'GIF Animata'
+                        if (img.alt.includes('GIF Animata') || img.alt.includes('UI Element')) {
+                               gsap.to(img, { filter: "brightness(1.5)", duration: 0.05, repeat: 1, yoyo: true, ease: "steps(1)", delay: (i * 0.3) + 1.5,
+                                   scrollTrigger: { trigger: img, start: "top 80%", toggleActions: "play none none reverse", markers: false }
+                               });
+                        }
+                    });
+                }
+            });
+
+            // Animazioni per le Service Cards
+            const serviceCards = document.querySelectorAll('.service-card');
+            if (serviceCards.length > 0) {
+                gsap.from(serviceCards, {
+                    opacity: 0, y: 80, stagger: 0.15, duration: 1, ease: "elastic.out(1, 0.5)",
+                    scrollTrigger: { trigger: '#services', start: "top 75%", toggleActions: "play none none none", markers: false }
+                });
+            }
+
+            // Animazioni per la nuova sezione "Contatto e Prenervazioni"
+            const contactBookingSection = document.getElementById('contact-booking');
+            if (contactBookingSection) {
+                gsap.from(contactBookingSection.querySelectorAll('h2, p, h3, .flatpickr-calendar, #time-slots, #booking-form, #platform-icons-container, #contact-form-main, .contact-social-links'), {
+                    opacity: 0, y: 50, stagger: 0.05, duration: 0.8, ease: "power2.out",
+                    scrollTrigger: { trigger: contactBookingSection, start: "top 75%", toggleActions: "play none none none", markers: false }
+                });
+            }
+        });
+
+        // Animazione per i numeri dei progetti (01, 02, 03...)
+        document.querySelectorAll('section[id^="project-"]').forEach(section => {
+            const projectNumber = section.querySelector('.project-number-bg');
+            if (projectNumber) {
+                gsap.fromTo(projectNumber,
+                    { opacity: 0, x: "-100vw", rotate: -90 },
+                    {
+                        opacity: 0.04, x: 0, rotate: -15, duration: 2, ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 80%",
+                            end: "bottom 20%",
+                            toggleActions: "play reverse play reverse",
+                            markers: false,
+                            scrub: true
+                        }
+                    }
+                );
+            }
+        });
+
+    </script>
+</body>
+</html>
