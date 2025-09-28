@@ -1,733 +1,517 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reforma - Brand Identity Dinamica V7 (Completo)</title>
-    <!-- Caricamento di Tailwind CSS -->
+    <title>Studio Creativo - V6.20</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- NUOVI FONT: Inter per il testo, Chakra Petch per i titoli (stile geometrico/digitale) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
-    
-    <!-- Lucide icons per le icone -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <style>
-        /* Definizione del font principale: Inter */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000; /* Nero puro */
-            color: #ffffff;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            overflow-x: hidden;
         }
-        /* Classe per bloccare lo scorrimento del body quando il menu è aperto */
-        .overflow-hidden-mobile {
-            overflow: hidden;
+        .text-hero {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
         }
-
-        /* Font bold per i titoli e gli elementi chiave (Chakra Petch) */
-        .font-headline { 
-            font-family: 'Chakra Petch', sans-serif; 
-            font-weight: 700; /* Lo rendiamo sempre molto bold per impatto */
-        } 
-
-        /* Colore accento personalizzato (Giallo/Oro vibrante) */
-        .text-accent { color: #facc15; /* Yellow 500 */ }
-        .bg-accent { background-color: #facc15; }
-        .border-accent { border-color: #facc15; }
-        
-        /* Stile per il pulsante principale */
-        .btn-graphic {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(250, 202, 21, 0.3);
-            font-family: 'Chakra Petch', sans-serif;
+        .typed-word::after {
+            content: '|';
+            display: inline-block;
+            animation: blink-caret 0.75s step-end infinite;
+            color: #ff0000;
         }
-        .btn-graphic:hover {
-            box-shadow: 0 6px 20px rgba(250, 202, 21, 0.5);
-            transform: translateY(-2px);
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ff0000; }
         }
-
-        /* STATS Row Styles - Reso scorribile e rimosso scrollbar */
-        .stats-row-container {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
+        .btn-primary {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .stats-row-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        .stats-row {
-            display: flex;
-            flex-wrap: nowrap; 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
-            padding-bottom: 0.5rem; 
-            padding-left: 1rem; 
-            padding-right: 1.5rem; 
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%);
+            z-index: 100;
+            padding: 1rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+            opacity: 0;
         }
-        .stat-item {
-            flex: 0 0 auto;
-            /* Su mobile (sotto 768px), le card occupano il 45% della larghezza */
-            width: 45vw; 
-            margin-right: 1rem; 
+        .message-box.show {
+            display: block;
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
-        .stat-card {
-            background-color: #111111;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid #333333;
-            transition: border-color 0.3s;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .message-box.success {
+            background-color: #10b981;
+            color: white;
         }
-        .stat-card:hover {
-            border-color: #facc15;
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        /* Modifica: Allinea il testo a sinistra all'interno delle card */
-        .stat-card.text-left {
-             text-align: left;
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .stat-number {
-            font-size: 3rem; 
-            line-height: 1;
+        .portfolio-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .stat-label {
-            font-family: 'Inter', sans-serif; /* Manteniamo Inter qui */
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            line-height: 1.2;
-            text-transform: uppercase;
+        .portfolio-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        
-        /* Stili per l'INDICATORE SWIPE */
-        .swipe-indicator-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 0 1.5rem;
+        .gallery-container {
+            /* Rende la griglia responsive senza media queries */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
-        .swipe-bar {
-            width: 60px; /* Larghezza della barra grigia */
-            height: 4px;
-            background-color: #333; /* Grigio scuro */
-            border-radius: 2px;
-            position: relative;
-            margin-left: 0.5rem;
-        }
-        .swipe-thumb {
-            width: 50%; /* Il pollice è metà della barra */
-            height: 100%;
-            background-color: #facc15; /* Giallo accento */
-            border-radius: 2px;
-            position: absolute;
-            left: 0;
-            transition: transform 0.2s; /* Transizione per il movimento */
-        }
-        
-        /* Stili per le CARD SERVIZI (LIQUID DESIGN) */
         .service-card {
-            background-color: #0c0c0c;
-            border: 1px solid #333333;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s, color 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .service-card .icon-container, .service-card .text-content {
-            z-index: 10;
-            position: relative;
-            transition: color 0.3s;
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
-        
-        /* Pseudo-elemento per l'effetto "liquid" */
-        .service-card::before {
-            content: '';
-            position: absolute;
+        .guide-card {
+            transition: transform 0.3s ease;
+        }
+        .guide-card:hover {
+            transform: translateY(-5px);
+        }
+        .image-container {
+            position: relative;
+            width: 100%;
+            /* Rende il contenitore reattivo */
+            height: auto;
+        }
+        .image-container img {
+            position: relative;
             top: 0;
             left: 0;
             width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .client-card {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .client-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        .client-logo-wrapper {
+            width: 128px;
+            height: 128px;
+            margin: 0 auto 1rem;
+            border-radius: 9999px;
+            border: 4px solid #ef4444; /* Modificato da giallo a rosso */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem;
+            background-color: #262626;
+        }
+        .client-logo {
+            width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #facc15 0%, #ff8c00 100%); /* Giallo (yellow-500) a Arancione (orange) */
-            opacity: 0;
-            transform: scale(0.8);
-            border-radius: 12px;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            pointer-events: none;
+            border-radius: 9999px;
+            object-fit: cover;
         }
-        
-        /* Stato HOVER */
-        .service-card:hover {
-            border-color: transparent;
+        .splide__pagination {
+            bottom: -2rem !important;
         }
-        .service-card:hover::before {
+        .splide__pagination__page {
+            background: #ef4444 !important; /* Modificato da giallo a rosso */
+            opacity: 0.5;
+        }
+        .splide__pagination__page.is-active {
             opacity: 1;
-            transform: scale(1.0);
+            transform: scale(1.2);
         }
-        /* Cambiamento colore Icona e Testo in NERO su HOVER */
-        .service-card:hover .icon-color-target {
-            color: #000000 !important;
-        }
-        .service-card:hover .text-color-target {
-            color: #000000 !important;
-        }
-        
-        /* Stili Desktop */
-        @media (min-width: 768px) {
-            .stats-row {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                overflow-x: hidden;
-                padding: 0 1.5rem;
-                gap: 1.5rem;
-            }
-             .stat-item {
-                width: auto;
-                margin-right: 0;
-            }
-            .stat-number {
-                font-size: 4rem;
-            }
-            /* Nasconde l'indicatore di scroll sul desktop */
-            .mobile-scroll-indicator {
-                display: none !important;
-            }
-            .swipe-indicator-container {
-                display: none; /* Nasconde l'indicatore Swipe su desktop */
-            }
-            .content-padding {
-                padding-top: 6rem;
-            }
-        }
-        
-        /* Hero Section Adjustments for Affiancamento */
-        @media (min-width: 768px) {
-             .hero-container {
-                /* Altezza minima per dare spazio al contenuto */
-                min-height: 80vh; 
-             }
+        .splide__arrow {
+            display: none !important;
         }
     </style>
 </head>
-<body class="bg-black text-white antialiased">
+<body class="bg-gray-950 text-gray-100">
 
-    <!-- Navbar Corretta: Fissa in alto -->
-    <header class="sticky top-0 z-50 bg-black/95 backdrop-blur-md p-4 border-b border-white/10">
-        <div class="flex justify-between items-center max-w-7xl mx-auto px-4">
-            
-            <!-- Logo e Nome (Modificato per includere l'immagine del logo) -->
-            <a href="#hero" class="flex items-center text-3xl font-headline font-bold tracking-tight">
-                <!-- IMMAGINE LOGO (PNG Trasparente) -->
-                <img src="logo.png" 
-                     alt="Logo Reforma" 
-                     class="h-7 w-auto mr-2" 
-                     onerror="this.onerror=null; this.src='https://placehold.co/32x32/000000/ffffff?text=LOGO'"
-                >
-                <span class="text-accent">R</span>eforma
+    <!-- Message Box -->
+    <div id="message-box" class="message-box"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-gray-950 bg-opacity-90 backdrop-blur-sm shadow-lg">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6 md:px-12 lg:px-24">
+            <a href="#" class="text-3xl font-bold tracking-tight text-red-500">
+                <span class="text-white">RUBIX</span>CREW
             </a>
             
-            <button id="menu-button" class="md:hidden p-2 rounded-lg hover:bg-white/10 transition duration-150">
-                <svg id="menu-icon" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <svg id="close-icon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-white focus:outline-none z-50" aria-expanded="false" aria-controls="mobile-menu">
+                <i class="fa-solid fa-bars text-2xl"></i>
             </button>
-            <nav class="hidden md:flex space-x-8 text-lg font-medium">
-                <a href="#about" class="hover:text-accent transition duration-150 relative group">Chi siamo</a>
-                <a href="#portfolio" class="hover:text-accent transition duration-150 relative group">Portfolio</a>
-                <a href="#contact" class="bg-accent text-black px-4 py-2 rounded-full font-bold btn-graphic">
-                    Contattaci
-                </a>
-            </nav>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex flex-grow justify-center space-x-6 items-center">
+                <nav class="space-x-6 items-center">
+                    <a href="#hero" class="text-gray-300 hover:text-white transition-colors font-medium">HOME</a>
+                    <a href="#about" class="text-gray-300 hover:text-white transition-colors font-medium">SERVIZI</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-white transition-colors font-medium">RECENSIONI</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition-colors font-medium">CONTATTI</a>
+                    <a href="https://discord.com" class="text-gray-300 hover:text-white transition-colors font-medium">DISCORD</a>
+                </nav>
+            </div>
+            <div class="hidden md:flex space-x-4 items-center">
+                <a href="#" class="px-6 py-2 bg-red-500 text-black rounded-full font-bold hover:bg-red-600 transition-colors">ENTRA NEL TEAM</a>
+                <a href="#" class="px-6 py-2 bg-gray-600 text-white rounded-full font-bold hover:bg-gray-700 transition-colors">ACCEDI</a>
+            </div>
         </div>
-        <!-- Mobile Navigation Drawer -->
-        <nav id="mobile-menu" class="fixed top-0 left-0 w-full h-screen hidden bg-black z-40">
-            <ul class="flex flex-col text-center space-y-10 p-8 pt-24 text-3xl font-headline font-bold">
-                <li><a href="#about" class="block py-4 hover:text-accent menu-link transition duration-150 border-b border-gray-800">Chi siamo</a></li>
-                <li><a href="#portfolio" class="block py-4 hover:text-accent menu-link transition duration-150 border-b border-gray-800">Portfolio</a></li>
-                <li>
-                    <a href="#contact" class="block mt-10 px-6 py-4 bg-accent text-black rounded-xl font-bold btn-graphic menu-link text-2xl">
-                        Inizia il tuo progetto
-                    </a>
-                </li>
-            </ul>
-        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 bg-gray-950 transform -translate-x-full transition-transform duration-300 ease-in-out z-40 md:hidden">
+            <div class="flex flex-col items-center justify-center h-full space-y-8">
+                <a href="#hero" class="text-gray-300 text-3xl font-bold hover:text-white transition-colors">HOME</a>
+                <a href="#about" class="text-gray-300 text-3xl font-bold hover:text-white transition-colors">SERVIZI</a>
+                <a href="#testimonials" class="text-gray-300 text-3xl font-bold hover:text-white transition-colors">RECENSIONI</a>
+                <a href="#contact" class="text-gray-300 text-3xl font-bold hover:text-white transition-colors">CONTATTI</a>
+                <a href="https://discord.com" class="text-gray-300 text-3xl font-bold hover:text-white transition-colors">DISCORD</a>
+                <a href="#" class="px-8 py-4 bg-red-500 text-black rounded-full font-bold hover:bg-red-600 transition-colors mt-8">ENTRA NEL TEAM</a>
+                <a href="#" class="px-8 py-4 border-2 border-gray-600 text-white rounded-full font-bold hover:bg-gray-700 transition-colors">ACCEDI</a>
+            </div>
+        </div>
     </header>
 
-    <main class="max-w-7xl mx-auto">
-
-        <!-- 1. Hero Section -->
-        <!-- Layout a griglia su desktop (md:grid-cols-2) per affiancare titolo e immagine -->
-        <section id="hero" class="hero-container flex flex-col content-padding pb-16 px-4 overflow-hidden relative md:grid md:grid-cols-2 md:items-center md:gap-8">
-            
-            <!-- Contenitore Testo e CTA (Colonna 1, Centrato verticalmente) -->
-            <div class="flex flex-col justify-center text-center md:text-left mb-10 md:mb-0">
-                <p class="text-lg text-gray-400 mb-4 tracking-wider uppercase font-headline">REFORMA | DIGITAL CRAFTING</p>
-                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black leading-tight mb-6 font-headline">
-                    Riformiamo la tua <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">Identità Digitale</span>
-                </h1>
-                <p class="text-xl text-gray-300 max-w-3xl mb-12">
-                    Trasformiamo la tua visione in una realtà indimenticabile. Un'identità coesa, potente e pronta a lasciare un segno indelebile.
-                </p>
-
-                <a href="#contact" class="px-8 py-4 bg-accent text-black font-bold text-xl rounded-xl shadow-2xl btn-graphic uppercase tracking-wider mx-auto md:mx-0">
-                    Inizia il tuo progetto
-                </a>
-            </div>
-
-            <!-- Key Visual (Slot Immagine PNG Trasparente) - Colonna 2, a Destra -->
-            <!-- Rimosso il contenitore 'image-glow-container' -->
-            <div class="relative flex justify-center items-center h-full">
-                <!-- 
-                    SOSTITUISCI L'URL DI SEGUITO CON L'IMMAGINE SENZA SFONDO (PNG TRASPARENTE) CHE VUOI UTILIZZARE.
-                -->
-                <img src="faraone.png" 
-                     alt="Visual Key di Reforma" 
-                     class="w-full h-auto object-contain max-w-sm md:max-w-full" 
-                     onerror="this.onerror=null; this.src='https://placehold.co/500x500/000000/ffffff?text=Carica+Immagine'"
-                >
+    <main>
+        <!-- Homepage - Hero Section -->
+        <section id="hero" class="relative overflow-hidden min-h-screen bg-gray-950 pt-20 flex items-center">
+            <!-- Updated background with no text -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://placehold.co/1920x1080/1a1a1a/1a1a1a');"></div>
+            <!-- Utilizzo di flex-col-reverse per mettere l'immagine sopra il testo su mobile, e md:grid-cols-2 per il desktop -->
+            <div class="container mx-auto px-6 md:px-12 lg:px-24 relative z-10 grid md:grid-cols-2 gap-12 items-center flex-col-reverse md:flex-row">
+                <!-- Left Column - Text Content -->
+                <div class="relative z-10 text-center md:text-left">
+                    <h1 class="text-hero text-white mb-6 font-extrabold tracking-tight">
+                        Trasformiamo le tue idee in realtà di <span id="typed-word" class="typed-word font-extrabold text-red-500"></span>
+                    </h1>
+                    <p class="text-lg text-gray-300 mb-8 max-w-lg mx-auto md:mx-0">
+                        Siamo uno studio creativo che fonde creatività, strategia e innovazione per dare vita a progetti digitali su misura. Aiutiamo progetti emergenti a distinguere con esperienze visive d'impatto, curate nei minimi dettagli.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                        <a href="#services" class="inline-block px-8 py-4 bg-red-500 text-black rounded-full font-bold shadow-lg hover:bg-red-600 transition-colors text-center">
+                            INIZIA IL TUO PERCORSO
+                        </a>
+                        <a href="#portfolio" class="inline-block px-8 py-4 border-2 border-gray-600 text-gray-400 rounded-full font-bold hover:bg-gray-600 hover:text-white transition-colors text-center">
+                            ESPLORA I NOSTRI PROGETTI
+                        </a>
+                    </div>
+                </div>
+                <!-- Right Column - Image Container -->
+                <div class="relative z-10 image-container mt-8 md:mt-0">
+                    <img src="minecraft.png" alt="Progetto digitale" class="rounded-2xl shadow-xl">
+                </div>
             </div>
         </section>
 
-        <!-- 2. About Section - Statistiche in Riga (Scroll orizzontale) -->
-        <section id="about" class="py-20 border-t border-white/10">
-            <!-- TITOLO -->
-            <div class="text-center mb-10 px-4">
-                 <h2 class="text-4xl md:text-5xl font-extrabold mb-2 font-headline">
-                    I numeri parlano <span class="text-accent">chiaro.</span>
-                </h2>
-                <div class="w-16 h-1 bg-accent mx-auto mt-2"></div> <!-- Sottolineatura sotto il titolo -->
-            </div>
-           
-            <!-- NUOVO INDICATORE SWIPE (visibile solo su mobile) -->
-            <div id="swipe-indicator" class="swipe-indicator-container md:hidden">
-                <p class="text-sm font-bold text-gray-500 uppercase tracking-widest font-headline">SWIPE</p>
-                <div id="swipe-bar" class="swipe-bar">
-                    <div id="swipe-thumb" class="swipe-thumb"></div>
-                </div>
-            </div>
-
-            <!-- Contenitori STATISTICHE (Scorrevole) -->
-            <div class="stats-row-container mb-10">
-                <div id="stats-content" class="stats-row">
-                    <!-- Statistica 1 -->
-                    <div class="stat-item">
-                         <!-- MODIFICA QUI: Aggiunta di 'text-left' -->
-                         <div class="stat-card text-left">
-                            <p class="text-accent stat-number" data-target="5" data-suffix="+">0</p>
-                            <p class="text-gray-400 stat-label">Anni di Esperienza</p>
+        <!-- Sezione Portfolio -->
+        <section id="portfolio" class="py-24 md:py-32 bg-gray-950 reveal">
+            <div class="container mx-auto px-6 md:px-12 lg:px-24 text-center">
+                <h3 class="text-sm font-semibold text-red-500 uppercase tracking-widest mb-2">I NOSTRI PROGETTI</h3>
+                <h2 class="text-3xl font-bold text-white mb-16">Scopri i nostri progetti più recenti</h2>
+                <div class="gallery-container">
+                    <div class="portfolio-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="image.png" alt="Progetto 1" class="w-full h-auto">
+                        <div class="p-6 text-left">
+                            <p class="text-sm font-semibold text-gray-400 uppercase">Project Management</p>
+                            <h3 class="text-2xl font-bold text-white my-2">Rebrand & Project</h3>
+                            <p class="text-gray-400">Web Design & Sviluppo per un e-commerce di moda.</p>
                         </div>
                     </div>
-                    <!-- Statistica 2 -->
-                    <div class="stat-item">
-                        <!-- MODIFICA QUI: Aggiunta di 'text-left' -->
-                        <div class="stat-card text-left">
-                            <p class="text-accent stat-number" data-target="100" data-suffix="%">0</p>
-                            <p class="text-gray-400 stat-label">Tasso di Successo</p>
+                    <div class="portfolio-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="polpo.png" alt="Progetto 2" class="w-full h-auto">
+                        <div class="p-6 text-left">
+                            <p class="text-sm font-semibold text-gray-400 uppercase">Content & Social Media</p>
+                            <h3 class="text-2xl font-bold text-white my-2">Digital Marketing</h3>
+                            <p class="text-gray-400">Brand Identity completa per una startup tecnologica.</p>
                         </div>
                     </div>
-                    <!-- Statistica 3 -->
-                    <div class="stat-item">
-                        <!-- MODIFICA QUI: Aggiunta di 'text-left' -->
-                        <div class="stat-card text-left">
-                            <p class="text-accent stat-number" data-target="10" data-suffix="+">0</p>
-                            <p class="text-gray-400 stat-label">Software di Design</p>
-                        </div>
-                    </div>
-                    <!-- Statistica 4 -->
-                    <div class="stat-item">
-                        <!-- MODIFICA QUI: Aggiunta di 'text-left' -->
-                        <div class="stat-card text-left">
-                            <p class="text-accent stat-number" data-target="10" data-suffix="+">0</p>
-                            <p class="text-gray-400 stat-label">Progetti di Rebranding</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Team e Servizi -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-10 px-4">
-                <div>
-                    <h3 class="text-3xl font-bold mb-4 font-headline">La nostra filosofia: Onestà e Crescita Costruttiva.</h3>
-                    <p class="text-lg text-gray-300 leading-relaxed mb-6">
-                        Reforma è stata fondata da **Alberto**, con l'obiettivo di offrire una visione **onesta** e **costruttiva** che garantisca il successo a lungo termine del tuo progetto. Il nostro team è composto da giovani appassionati pronti a trasformare la tua idea in una realtà concreta.
-                    </p>
-                    <p class="text-lg text-gray-300 leading-relaxed">
-                        Scegliere Reforma significa optare per un tocco di autentica professionalità, dove ogni pixel e ogni strategia sono curati nei minimi dettagli.
-                    </p>
-                </div>
-                <!-- Vetrina Servizi (Effetto liquid design) -->
-                <div class="space-y-4 lg:pl-10">
-                    <!-- SERVIZIO 1: Visual Identity -->
-                    <div class="service-card p-4 rounded-lg group cursor-pointer transition duration-300 flex items-center justify-between">
-                        <div class="flex items-center text-content">
-                            <i data-lucide="palette" class="w-6 h-6 text-accent mr-3 transition duration-300 icon-color-target"></i>
-                            <h4 class="font-bold text-xl font-headline text-white text-color-target">Visual Identity</h4>
-                        </div>
-                    </div>
-                    
-                    <!-- SERVIZIO 2: Website Design & Dev -->
-                    <div class="service-card p-4 rounded-lg group cursor-pointer transition duration-300 flex items-center justify-between">
-                        <div class="flex items-center text-content">
-                            <i data-lucide="monitor" class="w-6 h-6 text-accent mr-3 transition duration-300 icon-color-target"></i>
-                            <h4 class="font-bold text-xl font-headline text-white text-color-target">Website Design & Dev</h4>
-                        </div>
-                    </div>
-                    
-                    <!-- SERVIZIO 3: Social Media & Marketing -->
-                    <div class="service-card p-4 rounded-lg group cursor-pointer transition duration-300 flex items-center justify-between">
-                        <div class="flex items-center text-content">
-                            <i data-lucide="rocket" class="w-6 h-6 text-accent mr-3 transition duration-300 icon-color-target"></i>
-                            <h4 class="font-bold text-xl font-headline text-white text-color-target">Social Media & Marketing</h4>
+                    <div class="portfolio-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="kiroowork.png" alt="Progetto 3" class="w-full h-auto">
+                        <div class="p-6 text-left">
+                            <p class="text-sm font-semibold text-gray-400 uppercase">Content Management</p>
+                            <h3 class="text-2xl font-bold text-white my-2">Gaming Website</h3>
+                            <p class="text-gray-400">Restyling di un sito corporate e strategia SEO.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. Process Section - Processo minimalista -->
-        <section class="py-20 border-t border-white/10 px-4">
-            <div class="text-center mb-16">
-                <p class="text-lg text-accent uppercase tracking-widest mb-2 font-headline">Il Metodo Reforma</p>
-                <h2 class="text-4xl md:text-5xl font-extrabold leading-snug inline-block border-b-4 border-accent pb-2 font-headline">
-                    Come <span class="text-accent">riformiamo</span> la tua identità
-                </h2>
+        <!-- Sezione Guide -->
+        <section id="guides" class="py-24 md:py-32 bg-gray-950 reveal">
+            <div class="container mx-auto px-6 md:px-12 lg:px-24 text-center">
+                <h3 class="text-sm font-semibold text-red-500 uppercase tracking-widest mb-2">GUIDE E RISORSE</h3>
+                <h2 class="text-3xl font-bold text-white mb-16">Approfondisci i nostri servizi</h2>
+                <div class="gallery-container">
+                    <!-- Guide Card 1 -->
+                    <div class="guide-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl p-6 text-left">
+                        <h3 class="text-2xl font-bold text-white mb-2">Guida al Web Design</h3>
+                        <p class="text-gray-400 mb-4">
+                            Scopri i principi fondamentali del web design moderno e come possono trasformare la tua presenza online.
+                        </p>
+                        <a href="#" class="text-red-500 font-bold hover:text-red-600 transition-colors">
+                            Leggi la guida &rarr;
+                        </a>
+                    </div>
+                    <!-- Guide Card 2 -->
+                    <div class="guide-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl p-6 text-left">
+                        <h3 class="text-2xl font-bold text-white mb-2">SEO: La Guida Definitiva</h3>
+                        <p class="text-gray-400 mb-4">
+                            Impara a ottimizzare il tuo sito per i motori di ricerca e a scalare le classifiche di Google.
+                        </p>
+                        <a href="#" class="text-red-500 font-bold hover:text-red-600 transition-colors">
+                            Leggi la guida &rarr;
+                        </a>
+                    </div>
+                    <!-- Guide Card 3 -->
+                    <div class="guide-card bg-gray-800 rounded-2xl overflow-hidden shadow-xl p-6 text-left">
+                        <h3 class="text-2xl font-bold text-white mb-2">Branding Efficace</h3>
+                        <p class="text-gray-400 mb-4">
+                            Crea un'identità di brand forte e coerente che risuoni con il tuo pubblico.
+                        </p>
+                        <a href="#" class="text-red-500 font-bold hover:text-red-600 transition-colors">
+                            Leggi la guida &rarr;
+                        </a>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="space-y-12 max-w-4xl mx-auto">
-                <!-- Step 1: Strategy -->
-                <div class="flex items-start p-4 rounded-lg bg-[#0c0c0c] border border-gray-800">
-                    <!-- Numero in Chakra Petch -->
-                    <p class="text-6xl font-black text-accent mr-6 font-headline">1</p>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2 font-headline">Building a strategy</h3>
-                        <p class="text-gray-400">
-                            Collaboreremo per identificare le migliori decisioni e la direzione strategica più efficace.
+        <!-- Sezione Clienti (Nuovo Carosello) -->
+        <section id="clients" class="py-24 md:py-32 bg-gray-950 reveal">
+            <div class="container mx-auto px-6 md:px-12 lg:px-24 text-center">
+                <h3 class="text-sm font-semibold text-red-500 uppercase tracking-widest mb-2">CLIENTI</h3>
+                <h2 class="text-3xl font-bold text-white mb-16">I Nostri Clienti</h2>
+
+                <div class="splide" role="group" aria-label="I Nostri Clienti">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            <!-- Cliente 1 -->
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="gapplemclogo.png" alt="Logo CoralMC" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">CoralMC</h3>
+                                    <p class="text-gray-400 text-sm">1200+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                            <!-- Cliente 2 -->
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="skytemple3.png" alt="Logo MetaMC" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">MetaMC</h3>
+                                    <p class="text-gray-400 text-sm">400+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                            <!-- Cliente 3 -->
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="los zetas.png" alt="Logo FearGames" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">FearGames</h3>
+                                    <p class="text-gray-400 text-sm">150+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                            <!-- Cliente 4 -->
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="dsfg.png" alt="Logo WarAccademy" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">WarAccademy</h3>
+                                    <p class="text-gray-400 text-sm">150+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                            <!-- Ripetizioni per lo scorrimento infinito -->
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="prices2.png" alt="Logo CoralMC" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">CoralMC</h3>
+                                    <p class="text-gray-400 text-sm">1200+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                            <li class="splide__slide p-4">
+                                <div class="client-card">
+                                    <div class="client-logo-wrapper">
+                                        <img src="fgxj.png" alt="Logo MetaMC" class="client-logo">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1">MetaMC</h3>
+                                    <p class="text-gray-400 text-sm">400+ Giocatori Connessi</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sezione Contatti Aggiornata -->
+        <section id="contact" class="py-24 md:py-32 bg-gray-950 reveal">
+            <div class="container mx-auto px-6 md:px-12 lg:px-24">
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-3xl font-bold text-white mb-4">Contattaci</h2>
+                        <p class="text-gray-400 mb-4">
+                            Scegli il modo che preferisci per metterti in contatto con noi. Siamo pronti ad ascoltare le tue idee e a trasformarle in realtà.
                         </p>
                     </div>
-                    <i data-lucide="trending-up" class="w-8 h-8 text-accent ml-auto flex-shrink-0 opacity-70 mt-2"></i>
-                </div>
-
-                <!-- Step 2: Design -->
-                <div class="flex items-start p-4 rounded-lg bg-[#0c0c0c] border border-gray-800">
-                    <!-- Numero in Chakra Petch -->
-                    <p class="text-6xl font-black text-accent mr-6 font-headline">2</p>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2 font-headline">Design & Crafting</h3>
-                        <p class="text-gray-400">
-                            Elaborazione di bozze e prototipi, con aggiornamenti costanti fino al risultato finale approvato.
-                        </p>
+                    <div class="flex flex-col items-center md:items-start gap-6">
+                        <a href="https://t.me/yourtelegramusername" target="_blank" class="w-full flex items-center justify-center md:justify-start gap-4 px-8 py-4 bg-red-500 text-black rounded-full font-bold hover:bg-red-600 transition-colors shadow-lg text-center">
+                            <i class="fa-brands fa-telegram text-2xl"></i>
+                            Contattaci su Telegram
+                        </a>
+                        <a href="https://discord.gg/yourinvite" target="_blank" class="w-full flex items-center justify-center md:justify-start gap-4 px-8 py-4 border-2 border-red-500 text-red-500 rounded-full font-bold hover:bg-red-500/20 transition-colors shadow-lg text-center">
+                            <i class="fa-brands fa-discord text-2xl"></i>
+                            Unisciti al nostro Discord
+                        </a>
                     </div>
-                    <i data-lucide="pen-tool" class="w-8 h-8 text-accent ml-auto flex-shrink-0 opacity-70 mt-2"></i>
-                </div>
-
-                <!-- Step 3: Success -->
-                <div class="flex items-start p-4 rounded-lg bg-[#0c0c0c] border border-gray-800">
-                    <!-- Numero in Chakra Petch -->
-                    <p class="text-6xl font-black text-accent mr-6 font-headline">3</p>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2 font-headline">Launch & Success</h3>
-                        <p class="text-gray-400">
-                            Consegniamo gli asset e ti forniamo gli strumenti per continuare a crescere autonomamente nel tempo.
-                        </p>
-                    </div>
-                    <i data-lucide="check-check" class="w-8 h-8 text-accent ml-auto flex-shrink-0 opacity-70 mt-2"></i>
                 </div>
             </div>
         </section>
-
-        <!-- 4. Portfolio Section -->
-        <section id="portfolio" class="py-20 border-t border-white/10 px-4">
-            <div class="text-center mb-16">
-                <p class="text-lg text-accent uppercase tracking-widest mb-2 font-headline">I nostri capolavori</p>
-                <h2 class="text-4xl md:text-5xl font-extrabold leading-snug inline-block border-b-4 border-accent pb-2 font-headline">
-                    Visioni <span class="text-accent">plasmate</span> in realtà
-                </h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Project 1: meyou -->
-                <a href="#" class="group block h-64 md:h-80 rounded-xl overflow-hidden shadow-2xl relative transition duration-300 hover:shadow-yellow-500/30">
-                    <!-- HO AGGIORNATO QUI: INSERISCI IL PERCORSO CORRETTO DELLA TUA IMMAGINE meyou.png -->
-                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" 
-                         style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url('fgxj.png');"></div>
-                    <div class="absolute bottom-6 left-6 z-10">
-                        <h3 class="text-4xl font-black text-white font-headline">meyou</h3>
-                        <p class="text-accent uppercase text-sm font-semibold tracking-wider font-headline">Visual Identity & UX Design</p>
-                    </div>
-                </a>
-
-                <!-- Project 2: CHILI RIDERS -->
-                <a href="#" class="group block h-64 md:h-80 rounded-xl overflow-hidden shadow-2xl relative transition duration-300 hover:shadow-yellow-500/30">
-                    <!-- HO AGGIORNATO QUI: INSERISCI IL PERCORSO CORRETTO DELLA TUA IMMAGINE chili_riders.jpg -->
-                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" 
-                         style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url('image.png');"></div>
-                     <div class="absolute bottom-6 left-6 z-10">
-                        <h3 class="text-4xl font-black text-white font-headline">CHILI RIDERS</h3>
-                        <p class="text-accent uppercase text-sm font-semibold tracking-wider font-headline">Web Development & Strategy</p>
-                    </div>
-                </a>
-
-                <!-- Project 3: Tastiera (Full width) -->
-                <a href="#" class="group block h-64 md:h-80 rounded-xl overflow-hidden shadow-2xl md:col-span-2 relative transition duration-300 hover:shadow-yellow-500/30">
-                    <!-- HO AGGIORNATO QUI: INSERISCI IL PERCORSO CORRETTO DELLA TUA IMMAGINE tastiera_custom.jpg -->
-                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-102" 
-                         style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2)), url('minecraft.png');"></div>
-                    <div class="absolute bottom-8 left-8 z-10">
-                        <h3 class="text-5xl font-black text-white font-headline">Progetto Tastiera Custom</h3>
-                        <p class="text-accent uppercase text-sm font-semibold tracking-wider font-headline">Product & Industrial Design</p>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- 5. Testimonials Section (Più pulita e minimalista) -->
-        <section class="py-20 px-4">
-            <div class="text-center mb-16">
-                <p class="text-lg text-accent uppercase tracking-widest mb-2 font-headline">Fiducia</p>
-                <h2 class="text-4xl md:text-5xl font-extrabold leading-snug inline-block border-b-4 border-accent pb-2 font-headline">
-                    Il passaparola è la nostra <span class="text-accent">strategia</span>
-                </h2>
-            </div>
-
-            <div class="space-y-6 max-w-4xl mx-auto">
-                <!-- Testimonial 1: Manuel Musarella -->
-                <div class="p-6 rounded-xl bg-[#0c0c0c] border border-gray-800 hover:border-accent transition duration-300">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <i data-lucide="crown" class="w-8 h-8 text-accent"></i>
-                        <div>
-                            <p class="font-bold text-xl font-headline">Manuel Musarella</p>
-                            <p class="text-gray-400 text-sm">Enterpreneur</p>
-                        </div>
-                    </div>
-                    <p class="text-lg leading-relaxed text-gray-300">
-                        "Team disponibile e professionale, numerose richieste di siti progettati in pieno successo con tempi brevi, consigliati."
-                    </p>
-                </div>
-
-                <!-- Testimonial 2: Giacomo Bertolazzi -->
-                <div class="p-6 rounded-xl bg-[#0c0c0c] border border-gray-800 hover:border-accent transition duration-300">
-                     <div class="flex items-center space-x-4 mb-4">
-                        <i data-lucide="zap" class="w-8 h-8 text-accent"></i>
-                        <div>
-                            <p class="font-bold text-xl font-headline">Giacomo Bertolazzi</p>
-                            <p class="text-gray-400 text-sm">Ex Cliente Reforma</p>
-                        </div>
-                    </div>
-                    <p class="text-lg leading-relaxed text-gray-300">
-                        "Ho acquistato un servizio di rebrand e sono stato molto contento. Il livello è alto, super soddisfatto della qualità, tempi di consegna brevi e ottimi risultati. Consiglio."
-                    </p>
-                    </div>
-
-                <!-- Testimonial 3: Luca Miraglino -->
-                <div class="p-6 rounded-xl bg-[#0c0c0c] border border-gray-800 hover:border-accent transition duration-300">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <i data-lucide="flame" class="w-8 h-8 text-accent"></i>
-                        <div>
-                            <p class="font-bold text-xl font-headline">Luca Miraglino</p>
-                            <p class="text-gray-400 text-sm">Ceo of Chiliriders</p>
-                        </div>
-                    </div>
-                    <p class="text-lg leading-relaxed text-gray-300">
-                        "Il rapporto professionale con i ragazzi di Reforma è stato eccellente, basato su fiducia, chiarezza e professionalità. Una lunga collaborazione basata su risultati concreti."
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. Call to Action Finale -->
-        <section id="contact" class="py-20 text-center px-4">
-            <div class="max-w-4xl mx-auto bg-[#111] p-8 sm:p-12 rounded-2xl border border-accent/30 shadow-2xl shadow-yellow-500/10">
-                <h2 class="text-4xl md:text-5xl font-black mb-4 leading-snug font-headline">
-                    Pronto a <span class="text-accent">riformare</span> la tua immagine?
-                </h2>
-                <p class="text-lg text-gray-300 mb-8">
-                    Iniziamo a scolpire la tua identità oggi. Contattaci per una consulenza senza impegno.
-                </p>
-                <a href="mailto:contatto@reforma.it" class="px-10 py-4 bg-accent text-black font-bold text-xl rounded-full shadow-2xl btn-graphic uppercase tracking-wider">
-                    Contattaci ora!
-                </a>
-            </div>
-        </section>
-
     </main>
 
     <!-- Footer -->
-    <footer class="mt-20 pt-16 pb-24 border-t border-white/10 px-4">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-                <h3 class="text-3xl font-headline font-extrabold tracking-tight mb-4">
-                    <span class="text-accent">R</span>eforma
-                </h3>
-                <p class="text-gray-400 max-w-xs">
-                    Riformiamo la tua identità digitale. Fondata da Alberto.
-                </p>
-            </div>
-
-            <!-- Contatti -->
-            <div>
-                <h4 class="text-xl font-bold mb-4 border-b-2 border-accent inline-block pb-1 font-headline">Contatti</h4>
-                <div class="space-y-2 text-gray-300">
-                    <p class="flex items-center">
-                        <i data-lucide="mail" class="w-5 h-5 text-accent mr-3"></i>
-                        <a href="mailto:contatto@reforma.it" class="hover:text-white">contatto@reforma.it</a>
-                    </p>
-                    <p class="flex items-center">
-                        <i data-lucide="message-circle" class="w-5 h-5 text-accent mr-3"></i>
-                        <a href="https://wa.me/393737742584" class="hover:text-white">+39 3737742584</a>
-                    </p>
-                    <!-- MODIFICA QUI: Aggiornato l'URL e il testo di Instagram -->
-                    <p class="flex items-center">
-                        <i data-lucide="instagram" class="w-5 h-5 text-accent mr-3"></i>
-                        <a href="https://instagram.com/reforma.id" class="hover:text-white">@reforma.id</a>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Legali e Social -->
-            <div class="flex flex-col justify-between">
-                <div>
-                    <h4 class="text-xl font-bold mb-4 border-b-2 border-accent inline-block pb-1 font-headline">Legale</h4>
-                    <div class="space-y-1 text-gray-400 text-sm">
-                        <a href="#" class="block hover:text-accent">Termini di Servizio</a>
-                        <a href="#" class="block hover:text-accent">Privacy Policy</a>
-                        <a href="#" class="block hover:text-accent">Powered by Loclix</a>
-                    </div>
-                </div>
-
-                <!-- Copyright -->
-                <p class="text-sm text-gray-500 mt-8 md:mt-0">© 2024 Reforma. All rights reserved.</p>
-            </div>
+    <footer class="bg-gray-950 text-white py-12">
+        <div class="container mx-auto px-6 md:px-12 lg:px-24 text-center">
+            <p class="text-gray-500 text-sm">Copyright &copy; 2024. Tutti i diritti riservati. V6.20</p>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script>
-        // ----------------------------------------------------
-        // 1. Inizializzazione Icone
-        // ----------------------------------------------------
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer for Reveal Animations
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            revealElements.forEach(el => observer.observe(el));
 
-        // ----------------------------------------------------
-        // 2. Logica per il Menu Mobile
-        // ----------------------------------------------------
-        const menuButton = document.getElementById('menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
-        const closeIcon = document.getElementById('close-icon');
-        const menuLinks = document.querySelectorAll('.menu-link');
-        const body = document.body;
+            // Typewriter effect with multiple words
+            const typedWordElement = document.getElementById('typed-word');
+            const words = ["successo", "innovazione", "eccellenza", "qualità", "impatto"];
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
 
-        const toggleMenu = () => {
-            const isMenuOpen = mobileMenu.classList.toggle('hidden');
-            body.classList.toggle('overflow-hidden-mobile', !isMenuOpen);
-            menuIcon.classList.toggle('hidden', !isMenuOpen);
-            closeIcon.classList.toggle('hidden', isMenuOpen);
-        };
+            function typeWriter() {
+                const currentWord = words[wordIndex];
+                if (!isDeleting) {
+                    if (charIndex < currentWord.length) {
+                        typedWordElement.textContent += currentWord.charAt(charIndex);
+                        charIndex++;
+                        setTimeout(typeWriter, 100);
+                    } else {
+                        isDeleting = true;
+                        setTimeout(typeWriter, 2000);
+                    }
+                } else {
+                    if (charIndex > 0) {
+                        typedWordElement.textContent = typedWordElement.textContent.substring(0, typedWordElement.textContent.length - 1);
+                        charIndex--;
+                        setTimeout(typeWriter, 50);
+                    } else {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % words.length;
+                        setTimeout(typeWriter, 1000);
+                    }
+                }
+            }
+            typeWriter();
+            
+            // Initialize Splide carousel for clients
+            new Splide( '.splide', {
+                type: 'loop',
+                perPage: 4,
+                gap: '1.5rem',
+                autoplay: true,
+                pauseOnHover: true,
+                speed: 1000,
+                interval: 5000,
+                drag: 'free',
+                arrows: false,
+                breakpoints: {
+                    1024: {
+                        perPage: 3,
+                    },
+                    768: {
+                        perPage: 2,
+                    },
+                    640: {
+                        perPage: 1,
+                    }
+                }
+            }).mount();
 
-        menuButton.addEventListener('click', toggleMenu);
+            // Mobile menu functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-        // Chiudi il menu quando si clicca su un link
-        menuLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Previene lo scorrimento immediato per una chiusura fluida
-                e.preventDefault(); 
-                toggleMenu();
-                // Vai alla sezione dopo un breve ritardo per l'animazione di chiusura
-                setTimeout(() => {
-                    window.location.href = link.getAttribute('href');
-                }, 300); 
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                if (isExpanded) {
+                    mobileMenu.classList.add('-translate-x-full');
+                } else {
+                    mobileMenu.classList.remove('-translate-x-full');
+                }
+            });
+
+            // Chiudi il menu mobile quando si clicca su un link
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('-translate-x-full');
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                });
             });
         });
-
-        // ----------------------------------------------------
-        // 3. Logica per l'Animazione dei Contatori delle Statistiche
-        // ----------------------------------------------------
-        const counters = document.querySelectorAll('.stat-number');
-        const statsSection = document.getElementById('about');
-        let animationStarted = false;
-
-        const animateCounter = (counter) => {
-            const target = parseInt(counter.getAttribute('data-target'));
-            const suffix = counter.getAttribute('data-suffix') || '';
-            const duration = 2000; // 2 secondi
-            let start = null;
-
-            const step = (timestamp) => {
-                if (!start) start = timestamp;
-                const progress = timestamp - start;
-                const percentage = Math.min(progress / duration, 1);
-                
-                let currentValue = Math.floor(percentage * target);
-
-                // Formattazione speciale per il 100%
-                if (target === 100 && suffix === '%') {
-                    counter.textContent = currentValue + suffix;
-                } else {
-                    counter.textContent = currentValue + suffix;
-                }
-
-                if (percentage < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    // Assicura che il valore finale sia esattamente quello di destinazione
-                    counter.textContent = target + suffix;
-                }
-            };
-
-            window.requestAnimationFrame(step);
-        };
-
-        const handleIntersection = (entries, observer) => {
-            entries.forEach(entry => {
-                // Se la sezione "About" è visibile e l'animazione non è ancora iniziata
-                if (entry.isIntersecting && !animationStarted) {
-                    counters.forEach(animateCounter);
-                    animationStarted = true;
-                    observer.unobserve(entry.target); // Ferma l'osservatore
-                }
-            });
-        };
-
-        // Usa l'Intersection Observer per avviare l'animazione quando la sezione entra nel viewport
-        const observer = new IntersectionObserver(handleIntersection, {
-            root: null, // viewport
-            rootMargin: '0px',
-            threshold: 0.2 // Avvia quando il 20% della sezione è visibile
-        });
-
-        if (statsSection) {
-            observer.observe(statsSection);
-        }
-
-        // ----------------------------------------------------
-        // 4. Logica per l'Indicatore Swipe Mobile
-        // ----------------------------------------------------
-        const statsContent = document.getElementById('stats-content');
-        const swipeThumb = document.getElementById('swipe-thumb');
-        const swipeBar = document.getElementById('swipe-bar');
-        
-        if (statsContent && swipeThumb) {
-            statsContent.addEventListener('scroll', () => {
-                // Calcola la larghezza totale del contenuto scorrevole (tutte le card)
-                const totalScrollWidth = statsContent.scrollWidth;
-                // Calcola la larghezza visibile del contenitore
-                const clientWidth = statsContent.clientWidth;
-                // Calcola quanto è già stato scrollato orizzontalmente
-                const scrollLeft = statsContent.scrollLeft;
-                
-                // Larghezza dello scroll effettivo (scrolWidth - clientWidth)
-                const maxScroll = totalScrollWidth - clientWidth;
-
-                if (maxScroll > 0) {
-                    // Calcola la percentuale di scorrimento (0 a 1)
-                    const scrollPercentage = scrollLeft / maxScroll;
-                    
-                    // Muovi il "pollice" (thumb) dell'indicatore. 
-                    // Il thumb è largo il 50% della barra, quindi può muoversi per il restante 50%.
-                    const thumbTravelRange = swipeBar.clientWidth - swipeThumb.clientWidth;
-                    const thumbPosition = scrollPercentage * thumbTravelRange;
-                    
-                    swipeThumb.style.transform = `translateX(${thumbPosition}px)`;
-                }
-            });
-        }
     </script>
 </body>
 </html>
